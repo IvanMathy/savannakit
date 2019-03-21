@@ -84,7 +84,7 @@ class LineNumberLayoutManager: NSLayoutManager {
 		
 //		let style = DefaultTheme().lineNumbersStyle!
 		
-		let atts: [NSAttributedStringKey: Any] = [:
+		let atts: [NSAttributedString.Key: Any] = [:
 //			.font: style.font,
 //			.foregroundColor : style.textColor
 		]
