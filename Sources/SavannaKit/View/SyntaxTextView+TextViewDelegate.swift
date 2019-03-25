@@ -37,11 +37,7 @@ extension SyntaxTextView {
 	
 	func updateSelectedRange(_ range: NSRange) {
 		textView.selectedRange = range
-		
-		#if os(macOS)		
-		self.textView.scrollRangeToVisible(range)
-		#endif
-		
+		self.textView.scrollRangeToVisible(range)		
 		self.delegate?.didChangeSelectedRange(self, selectedRange: range)
 	}
 	
@@ -52,15 +48,8 @@ extension SyntaxTextView {
 		}
 		
 		if let cachedTokens = cachedTokens {
-			
-			#if os(iOS)
-				if !textView.isCursorFloating {
-					updateEditorPlaceholders(cachedTokens: cachedTokens)
-				}
-			#else
-				updateEditorPlaceholders(cachedTokens: cachedTokens)
-			#endif
-			
+						
+            updateEditorPlaceholders(cachedTokens: cachedTokens)
 		}
 		
 		colorTextView(lexerForSource: { (source) -> Lexer in
@@ -179,52 +168,6 @@ extension SyntaxTextView {
 			
 			contentDidChangeSelection()
 
-		}
-		
-	}
-	
-#endif
-
-#if os(iOS)
-	
-	extension SyntaxTextView: UITextViewDelegate {
-		
-		open func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-			
-			return self.shouldChangeText(insertingText: text)
-		}
-		
-		public func textViewDidBeginEditing(_ textView: UITextView) {
-			// pass the message up to our own delegate
-			delegate?.textViewDidBeginEditing(self)
-		}
-		
-		open func textViewDidChange(_ textView: UITextView) {
-			
-			didUpdateText()
-			
-		}
-		
-		func didUpdateText() {
-			
-			self.invalidateCachedTokens()
-			self.textView.invalidateCachedParagraphs()
-			textView.setNeedsDisplay()
-			
-			if let delegate = delegate {
-				colorTextView(lexerForSource: { (source) -> Lexer in
-					return delegate.lexerForSource(source)
-				})
-				
-				delegate.didChangeText(self)
-
-			}
-			
-		}
-	
-		open func textViewDidChangeSelection(_ textView: UITextView) {
-			
-			contentDidChangeSelection()
 		}
 		
 	}

@@ -7,15 +7,8 @@
 //
 
 import Foundation
+import AppKit
 
-#if os(macOS)
-	import AppKit
-#else
-	import UIKit
-#endif
-
-#if os(macOS)
-	
 	class TextViewWrapperView: View {
 		
 		override func hitTest(_ point: NSPoint) -> NSView? {
@@ -102,5 +95,3 @@ import Foundation
 		}
 		
 	}
-	
-#endif

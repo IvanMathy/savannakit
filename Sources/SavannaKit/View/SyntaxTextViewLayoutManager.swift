@@ -8,12 +8,7 @@
 
 import Foundation
 import CoreGraphics
-
-#if os(macOS)
-	import AppKit
-#else
-	import UIKit
-#endif
+import AppKit
 
 public enum EditorPlaceholderState {
 	case active
@@ -30,19 +25,9 @@ class SyntaxTextViewLayoutManager: NSLayoutManager {
 	
 	override func drawGlyphs(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
 		
-		#if os(macOS)
-
-			guard let context = NSGraphicsContext.current else {
-				return
-			}
-			
-		#else
-		
-			guard let context = UIGraphicsGetCurrentContext() else {
-				return
-			}
-			
-		#endif
+        guard let context = NSGraphicsContext.current else {
+            return
+        }
 		
 		let range = characterRange(forGlyphRange: glyphsToShow, actualGlyphRange: nil)
 		
@@ -63,18 +48,9 @@ class SyntaxTextViewLayoutManager: NSLayoutManager {
 			}
 			
 		})
-		
-		#if os(macOS)
 
-			context.saveGraphicsState()
-			context.cgContext.translateBy(x: origin.x, y: origin.y)
-		
-		#else
-			
-			context.saveGState()
-			context.translateBy(x: origin.x, y: origin.y)
-		
-		#endif
+        context.saveGraphicsState()
+        context.cgContext.translateBy(x: origin.x, y: origin.y)
 		
 		for (rect, state) in placeholders {
 			
@@ -92,31 +68,14 @@ class SyntaxTextViewLayoutManager: NSLayoutManager {
 			color.setFill()
 			
 			let radius: CGFloat = 4.0
-			
-			#if os(macOS)
 
-				let path = BezierPath(roundedRect: rect, xRadius: radius, yRadius: radius)
-
-			#else
-				
-				let path = BezierPath(roundedRect: rect, cornerRadius: radius)
-
-			#endif
+            let path = BezierPath(roundedRect: rect, xRadius: radius, yRadius: radius)
 			
 			path.fill()
 			
 		}
 		
-		#if os(macOS)
-
-			context.restoreGraphicsState()
-
-		#else
-
-			context.restoreGState()
-
-		#endif
-
+        context.restoreGraphicsState()
 		super.drawGlyphs(forGlyphRange: glyphsToShow, at: origin)
 
 	}

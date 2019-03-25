@@ -9,12 +9,7 @@
 // Converted from https://github.com/alldritt/TextKit_LineNumbers
 
 import Foundation
-
-#if os(macOS)
 import AppKit
-#else
-import UIKit
-#endif
 
 class LineNumberLayoutManager: NSLayoutManager {
 	
