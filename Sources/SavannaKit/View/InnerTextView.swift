@@ -21,6 +21,8 @@ final class InnerTextView: NSTextView {
 	var theme: SyntaxColorTheme?
 	
 	var cachedParagraphs: [Paragraph]?
+    
+    var autocompleteWords: [String]?
 	
 	func invalidateCachedParagraphs() {
 		cachedParagraphs = nil
@@ -49,28 +51,47 @@ final class InnerTextView: NSTextView {
             return textContainerInset.width
 		}
 	}
-    /*
-    override func didChangeText() {
-        super.didChangeText()
-        complete(nil)
-    }
     
-    override func insertText(_ string: Any, replacementRange: NSRange) {
+    override func didChangeText() {
         
-        super.insertText(string, replacementRange: replacementRange)
-        complete(nil)
+        super.didChangeText()
+        
+        // Invoke lint after two second delay
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        perform(#selector(complete(_:)), with: nil, afterDelay: 0.5)
     }
     
     override func completions(forPartialWordRange charRange: NSRange, indexOfSelectedItem index: UnsafeMutablePointer<Int>) -> [String]? {
         
-        super.completions(forPartialWordRange: charRange, indexOfSelectedItem: index)
-        return ["Hello"]
+        guard charRange.length > 0, let range = Range(charRange, in: text) else { return nil }
+        
+        var wordList = Set<String>()
+        let partialWord = String(text[range])
+
+        // Add words in document to wordList
+        let documentWords: [String] = {
+            // do nothing if the particle word is a symbol
+            guard charRange.length > 1 || CharacterSet.alphanumerics.contains(partialWord.unicodeScalars.first!) else { return [] }
+            
+            let pattern = "(?:^|\\b|(?<=\\W))" + NSRegularExpression.escapedPattern(for: partialWord) + "\\w+?(?:$|\\b)"
+            let regex = try! NSRegularExpression(pattern: pattern)
+            
+            return regex.matches(in: self.string, range: NSRange(..<self.string.endIndex, in: self.string)).map { (self.string as NSString).substring(with: $0.range) }
+        }()
+        _ = documentWords.map { wordList.insert($0) }
+
+        // Add words defined in lexer
+        if let autocompleteWords = self.autocompleteWords {
+            _ = autocompleteWords.map { wordList.insert($0) }
+        }
+        return Array(wordList)
+        
     }
     
-    override func insertCompletion(_ word: String, forPartialWordRange charRange: NSRange, movement: Int, isFinal flag: Bool) {
-        print("insert completion")
-        
-        super.insertCompletion("Hello", forPartialWordRange: charRange, movement: movement, isFinal: flag)
-    }*/
+//    override func insertCompletion(_ word: String, forPartialWordRange charRange: NSRange, movement: Int, isFinal flag: Bool) {
+//        print("insert completion")
+//
+//        super.insertCompletion("Hello", forPartialWordRange: charRange, movement: movement, isFinal: flag)
+//    }
 	
 }

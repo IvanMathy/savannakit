@@ -78,6 +78,12 @@ open class SyntaxTextView: View {
 		}
 	}
     
+    var autocompleteWords: [String]? {
+        didSet {
+            textView.autocompleteWords = autocompleteWords
+        }
+    }
+    
     public override init(frame: CGRect) {
         textView = SyntaxTextView.createInnerTextView()
         super.init(frame: frame)
@@ -204,7 +210,7 @@ open class SyntaxTextView: View {
 		if shouldChangeText(insertingText: text) {
 			
 			contentTextView.insertText(text)
-			
+			print(text)
 		}
         
         // auto completion
