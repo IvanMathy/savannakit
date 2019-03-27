@@ -65,10 +65,10 @@ final class InnerTextView: NSTextView {
         
         guard charRange.length > 0, let range = Range(charRange, in: text) else { return nil }
         
-        var wordList = Set<String>()
+        var wordList = [String]()
         let partialWord = String(text[range])
 
-        // Add words in document to wordList
+        // Add words in the document
         let documentWords: [String] = {
             // do nothing if the particle word is a symbol
             guard charRange.length > 1 || CharacterSet.alphanumerics.contains(partialWord.unicodeScalars.first!) else { return [] }
@@ -78,13 +78,20 @@ final class InnerTextView: NSTextView {
             
             return regex.matches(in: self.string, range: NSRange(..<self.string.endIndex, in: self.string)).map { (self.string as NSString).substring(with: $0.range) }
         }()
-        _ = documentWords.map { wordList.insert($0) }
+        wordList.append(contentsOf: documentWords)
 
         // Add words defined in lexer
         if let autocompleteWords = self.autocompleteWords {
-            _ = autocompleteWords.map { wordList.insert($0) }
+            
+            let syntaxWords = autocompleteWords.filter { $0.range(of: partialWord, options: [.caseInsensitive, .anchored]) != nil && $0.count != partialWord.count }
+            
+            wordList.append(contentsOf: syntaxWords)
         }
-        return Array(wordList)
+        
+        // Remove double words
+        let set:Set<String> = Set(wordList)
+        
+        return Array(set)
         
     }
     

@@ -110,5 +110,21 @@ extension RegexLexer {
 		
 		return tokens
 	}
+    
+    public var keywords: [String] {
+        
+        var list = [String]()
+        
+        for generator in generators(source: "") {
+            switch generator {
+            case .keywords(let generator):
+                list.append(contentsOf: generator.keywords)
+            default:
+                break
+            }
+        }
+        
+        return list
+    }
 
 }
