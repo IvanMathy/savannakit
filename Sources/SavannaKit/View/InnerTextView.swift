@@ -61,6 +61,7 @@ final class InnerTextView: NSTextView {
         perform(#selector(complete(_:)), with: nil, afterDelay: 0.5)
     }
     
+    /// Autocomplete
     override func completions(forPartialWordRange charRange: NSRange, indexOfSelectedItem index: UnsafeMutablePointer<Int>) -> [String]? {
         
         guard charRange.length > 0, let range = Range(charRange, in: text) else { return nil }
@@ -94,11 +95,4 @@ final class InnerTextView: NSTextView {
         return Array(set)
         
     }
-    
-//    override func insertCompletion(_ word: String, forPartialWordRange charRange: NSRange, movement: Int, isFinal flag: Bool) {
-//        print("insert completion")
-//
-//        super.insertCompletion("Hello", forPartialWordRange: charRange, movement: movement, isFinal: flag)
-//    }
-	
 }
