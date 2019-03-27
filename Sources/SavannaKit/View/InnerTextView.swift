@@ -89,6 +89,13 @@ final class InnerTextView: NSTextView {
             wordList.append(contentsOf: syntaxWords)
         }
         
+//        if partialWord == "fi" {
+//            print (self.autocompleteWords!)
+//        }
+        
+        // if word matches full word in list, e.g. "fi", don't suggest "field"
+        if wordList.contains(partialWord) { return nil }
+        
         // Remove double words
         let set:Set<String> = Set(wordList)
         
