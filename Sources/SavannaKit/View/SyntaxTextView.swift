@@ -435,10 +435,13 @@ open class SyntaxTextView: View {
                 
                 if lineIndex == line {
                     let highlightedRange = text.lineRange(for: NSMakeRange(oldIndex, 0))
-//                    self.contentTextView.textStorage!.addAttribute(NSAttributedString.Key.backgroundColor, value: color, range: highlightedRange)
+//                    self.contentTextView.textStorage!.addAttribute(.backgroundColor, value: color, range: highlightedRange)
                     
                     let columnHighlightRange = NSMakeRange(highlightedRange.location + column - 1, highlightedRange.length - column + 1)
-                    self.contentTextView.textStorage!.addAttribute(NSAttributedString.Key.backgroundColor, value: color, range: columnHighlightRange)
+                    self.contentTextView.textStorage?.addAttribute(.backgroundColor, value: color, range: columnHighlightRange)
+                    if let message = message {
+                        self.contentTextView.textStorage?.addAttribute(.toolTip, value: message, range: columnHighlightRange)
+                    }
                     
                 }
                 
