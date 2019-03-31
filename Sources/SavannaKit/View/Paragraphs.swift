@@ -7,14 +7,9 @@
 //
 
 import Foundation
+import AppKit
 
-#if os(macOS)
-	import AppKit
-#else
-	import UIKit
-#endif
-
-extension TextView {
+extension NSTextView {
 	
 	func paragraphRectForRange(range: NSRange) -> CGRect {
 		
@@ -69,12 +64,7 @@ func generateParagraphs(for textView: InnerTextView, flipRects: Bool = false) ->
 		
 		var rect: CGRect
 		
-		#if os(macOS)
-			let gutterWidth = textView.textContainerInset.width
-		#else
-			let gutterWidth = textView.textContainerInset.left
-		#endif
-		
+        let gutterWidth = textView.textContainerInset.width
 		let lineHeight: CGFloat = 18
 		
 		if let last = paragraphs.last {
@@ -88,11 +78,9 @@ func generateParagraphs(for textView: InnerTextView, flipRects: Bool = false) ->
 			
 		}
 		
-		
 		i += 1
 		let endParagraph = Paragraph(rect: rect, number: i)
 		paragraphs.append(endParagraph)
-		
 	}
 	
 	
@@ -164,12 +152,7 @@ func drawLineNumbers(_ paragraphs: [Paragraph], in rect: CGRect, for textView: I
 		let drawSize = attr.size()
 		
 		drawRect.origin.x = gutterWidth - drawSize.width - 4
-		
-		#if os(macOS)
-//			drawRect.origin.y += (drawRect.height - drawSize.height) / 2.0
-		#else
-			//			drawRect.origin.y += 22 - drawSize.height
-		#endif
+//        drawRect.origin.y += (drawRect.height - drawSize.height) / 2.0
 		drawRect.size.width = drawSize.width
 		drawRect.size.height = drawSize.height
 

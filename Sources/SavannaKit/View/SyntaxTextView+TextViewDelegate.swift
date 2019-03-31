@@ -211,20 +211,9 @@ extension SyntaxTextView {
 			insertingText += newLinePrefix
 		}
 		
-		let textStorage: NSTextStorage
-		
-		#if os(macOS)
-		
-		guard let _textStorage = textView.textStorage else {
+		guard let textStorage = textView.textStorage else {
 			return true
 		}
-		
-		textStorage = _textStorage
-		
-		#else
-		
-		textStorage = textView.textStorage
-		#endif
 		
 		guard let cachedTokens = cachedTokens else {
 			return true
