@@ -9,6 +9,7 @@
 import Foundation
 import CoreGraphics
 import AppKit
+import Carbon.HIToolbox
 
 protocol InnerTextViewDelegate: class {
 	func didUpdateCursorFloatingState()
@@ -55,10 +56,20 @@ final class InnerTextView: NSTextView {
     override func didChangeText() {
         
         super.didChangeText()
+        print("text did change \(Date().timeIntervalSince1970)")
         
+        if let event = self.window?.currentEvent,
+            event.type == .keyDown,
+            (event.keyCode == UInt16(kVK_Escape) || event.keyCode == UInt16(kVK_Delete)) {
+            print("ESC")
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+            return
+        }
+
+        print("invoking autocomplete")
         // Invoke lint after two second delay
         NSObject.cancelPreviousPerformRequests(withTarget: self)
-        perform(#selector(complete(_:)), with: nil, afterDelay: 0.5)
+        perform(#selector(complete(_:)), with: nil, afterDelay: 0.7)
     }
     
     /// Autocomplete
