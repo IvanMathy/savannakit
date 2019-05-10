@@ -48,6 +48,7 @@ struct ThemeInfo {
 open class SyntaxTextView: View {
 
 	var previousSelectedRange: NSRange?
+    public var allowsAutocomplete = true
 	
 	private var textViewSelectedRangeObserver: NSKeyValueObservation?
 

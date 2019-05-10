@@ -15,6 +15,9 @@ protocol InnerTextViewDelegate: class {
 	func didUpdateCursorFloatingState()
     
     func didChangeFont(_ font: Font)
+    
+    
+    func shouldAutocomplete() -> Bool
 }
 
 final class InnerTextView: NSTextView {
@@ -58,6 +61,10 @@ final class InnerTextView: NSTextView {
     override func didChangeText() {
         
         super.didChangeText()
+        
+        guard innerDelegate?.shouldAutocomplete() ?? true else {
+            return
+        }
         
         if let event = self.window?.currentEvent,
             event.type == .keyDown,

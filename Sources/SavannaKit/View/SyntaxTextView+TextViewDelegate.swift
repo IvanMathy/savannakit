@@ -21,6 +21,10 @@ extension SyntaxTextView: InnerTextViewDelegate {
     func didChangeFont(_ font: Font) {
         self.delegate?.didChangeFont(font)
     }
+    
+    func shouldAutocomplete() -> Bool {
+        return allowsAutocomplete
+    }
 	
 }
 
