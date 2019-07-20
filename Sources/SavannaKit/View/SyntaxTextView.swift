@@ -160,6 +160,7 @@ open class SyntaxTextView: View {
         textView.autoresizingMask = [.width, .height]
         textView.isEditable = true
         textView.isAutomaticQuoteSubstitutionEnabled = false
+        textView.isAutomaticDashSubstitutionEnabled = false
         textView.allowsUndo = true
         
         textView.textContainer?.containerSize = NSSize(width: self.bounds.width, height: .greatestFiniteMagnitude)

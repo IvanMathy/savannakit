@@ -102,23 +102,17 @@ func generateParagraphs(for textView: InnerTextView, flipRects: Bool = false) ->
 func offsetParagraphs(_ paragraphs: [Paragraph], for textView: InnerTextView, yOffset: CGFloat = 0) -> [Paragraph] {
 	
 	var paragraphs = paragraphs
-	
-	#if os(macOS)
 		
-		if let yOffset = textView.enclosingScrollView?.contentView.bounds.origin.y {
-			
-			paragraphs = paragraphs.map { (p) -> Paragraph in
-				
-				var p = p
-				p.rect.origin.y += yOffset
-				
-				return p
-			}
-		}
-		
-		
-	#endif
-	
+    if let yOffset = textView.enclosingScrollView?.contentView.bounds.origin.y {
+        
+        paragraphs = paragraphs.map { (p) -> Paragraph in
+            
+            var p = p
+            p.rect.origin.y += yOffset
+            
+            return p
+        }
+    }
 	
 	
 	paragraphs = paragraphs.map { (p) -> Paragraph in
@@ -152,13 +146,10 @@ func drawLineNumbers(_ paragraphs: [Paragraph], in rect: CGRect, for textView: I
 		let drawSize = attr.size()
 		
 		drawRect.origin.x = gutterWidth - drawSize.width - 4
-//        drawRect.origin.y += (drawRect.height - drawSize.height) / 2.0
+        drawRect.origin.y += (drawRect.height - drawSize.height)
 		drawRect.size.width = drawSize.width
 		drawRect.size.height = drawSize.height
-
-//		Color.red.withAlphaComponent(0.4).setFill()
-//		paragraph.rect.fill()
-		
+        
 		attr.draw(in: drawRect)
 		
 	}
