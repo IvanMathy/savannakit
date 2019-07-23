@@ -32,10 +32,6 @@ class MacViewController: NSViewController {
 }
 
 extension MacViewController: SyntaxTextViewDelegate {
-    public func didChangeFont(_ font: Font) {
-        
-    }
-    
     
     public func didChangeText(_ syntaxTextView: SyntaxTextView) {
         

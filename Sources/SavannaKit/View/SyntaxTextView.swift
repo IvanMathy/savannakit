@@ -19,8 +19,6 @@ public protocol SyntaxTextViewDelegate: class {
 	func textViewDidBeginEditing(_ syntaxTextView: SyntaxTextView)
 	
 	func lexerForSource(_ source: String) -> Lexer
-    
-    func didChangeFont(_ font: Font)
 }
 
 // Provide default empty implementations of methods that are optional.

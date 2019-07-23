@@ -14,9 +14,6 @@ import Carbon.HIToolbox
 protocol InnerTextViewDelegate: class {
 	func didUpdateCursorFloatingState()
     
-    func didChangeFont(_ font: Font)
-    
-    
     func shouldAutocomplete() -> Bool
 }
 
@@ -134,13 +131,5 @@ final class InnerTextView: NSTextView {
         
         return Array(set)
         
-    }
-    
-    override func changeFont(_ sender: Any?) {
-        
-        guard let oldFont = self.font, let fontManager = sender as? NSFontManager else { return }
-        let newFont = fontManager.convert(oldFont)
-        innerDelegate?.didChangeFont(newFont)
-        super.changeFont(sender)
     }
 }
