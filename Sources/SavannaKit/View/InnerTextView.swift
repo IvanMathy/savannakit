@@ -21,7 +21,7 @@ protocol InnerTextViewDelegate: class {
 }
 
 final class InnerTextView: NSTextView {
-	
+
 	weak var innerDelegate: InnerTextViewDelegate?
 	
 	var theme: SyntaxColorTheme?
@@ -29,7 +29,27 @@ final class InnerTextView: NSTextView {
 	var cachedParagraphs: [Paragraph]?
     
     var autocompleteWords: [String]?
-	
+    
+    override func menu(for event: NSEvent) -> NSMenu? {
+        let menu = super.menu(for: event)
+        
+        let bannedItems = [
+            "changeLayoutOrientation:",
+            "replaceQuotesInSelection:",
+            "toggleAutomaticQuoteSubstitution:",
+            "orderFrontFontPanel:"
+        ]
+        
+        // This is a mess.
+        menu?.items = menu?.items.filter { menuItem in
+            return !(menuItem.submenu?.items.contains { item in
+                    return bannedItems.contains(item.action?.description ?? "")
+                } ?? false)
+        } ?? []
+        
+        return menu
+    }
+    
 	func invalidateCachedParagraphs() {
 		cachedParagraphs = nil
 	}
