@@ -51,6 +51,7 @@ open class SyntaxTextView: View {
 	private var textViewSelectedRangeObserver: NSKeyValueObservation?
 
 	let textView: InnerTextView
+    var rulerView: LineRulerView?
 	
 	public var contentTextView: TextView {
 		return textView
@@ -63,8 +64,6 @@ open class SyntaxTextView: View {
 	}
 	
 	var ignoreSelectionChange = false
-	
-	let wrapperView = TextViewWrapperView()
 	
 	public var tintColor: NSColor! {
 		set {
@@ -113,9 +112,8 @@ open class SyntaxTextView: View {
 	
 	private func setup() {
 	
-		textView.gutterWidth = 20
-
-        wrapperView.translatesAutoresizingMaskIntoConstraints = false
+		//textView.gutterWidth = 20
+        
         
         scrollView.backgroundColor = .clear
         scrollView.drawsBackground = false
@@ -126,19 +124,10 @@ open class SyntaxTextView: View {
 
         addSubview(scrollView)
         
-        addSubview(wrapperView)
-
-        
         scrollView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         scrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        
-        wrapperView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        wrapperView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-        wrapperView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        wrapperView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        
         
         scrollView.borderType = .noBorder
         scrollView.hasVerticalScroller = true
@@ -146,10 +135,11 @@ open class SyntaxTextView: View {
         scrollView.scrollerKnobStyle = .light
         
         scrollView.documentView = textView
+    
+        scrollView.contentView.postsFrameChangedNotifications = true
         
-        scrollView.contentView.postsBoundsChangedNotifications = true
+        NotificationCenter.default.addObserver(self, selector: #selector(renewLines(_:)), name: NSView.frameDidChangeNotification, object: scrollView.contentView)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didScroll(_:)), name: NSView.boundsDidChangeNotification, object: scrollView.contentView)
         
         textView.minSize = NSSize(width: 0.0, height: self.bounds.height)
         textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
@@ -162,29 +152,28 @@ open class SyntaxTextView: View {
         textView.allowsUndo = true
         textView.usesFindBar = true
         
+       
         textView.textContainer?.containerSize = NSSize(width: self.bounds.width, height: .greatestFiniteMagnitude)
         textView.textContainer?.widthTracksTextView = true
-        
-//			textView.layerContentsRedrawPolicy = .beforeViewResize
-        
-        wrapperView.textView = textView
 		
 		textView.innerDelegate = self
 		textView.delegate = self
-		
+        
+        if let scrollView = textView.enclosingScrollView {
+            
+            rulerView = LineRulerView(textView: textView)
+            scrollView.verticalRulerView = rulerView
+            scrollView.hasVerticalRuler = true
+            scrollView.rulersVisible = true
+        }
+        
 		textView.text = ""
 	}
-	
-	open override func viewDidMoveToSuperview() {
-		super.viewDidMoveToSuperview()
-	
-	}
-	
-	@objc func didScroll(_ notification: Notification) {
-		
-		wrapperView.setNeedsDisplay(wrapperView.bounds)
-		
-	}
+    
+    @objc func renewLines(_ notification: Notification) {
+        self.textView.invalidateCachedParagraphs()
+        rulerView?.needsDisplay = true
+    }
 
 	// MARK: -
 	

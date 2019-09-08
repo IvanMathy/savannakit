@@ -108,19 +108,11 @@ func offsetParagraphs(_ paragraphs: [Paragraph], for textView: InnerTextView, yO
         paragraphs = paragraphs.map { (p) -> Paragraph in
             
             var p = p
-            p.rect.origin.y += yOffset
+            p.rect.origin.y -= yOffset
             
             return p
         }
     }
-	
-	
-	paragraphs = paragraphs.map { (p) -> Paragraph in
-		
-		var p = p
-		p.rect.origin.y += yOffset
-		return p
-	}
 	
 	return paragraphs
 }
@@ -133,6 +125,7 @@ func drawLineNumbers(_ paragraphs: [Paragraph], in rect: CGRect, for textView: I
 	
 	for paragraph in paragraphs {
 		
+        
 		guard paragraph.rect.intersects(rect) else {
 			continue
 		}
@@ -141,12 +134,9 @@ func drawLineNumbers(_ paragraphs: [Paragraph], in rect: CGRect, for textView: I
 		
 		var drawRect = paragraph.rect
 		
-		let gutterWidth = textView.gutterWidth
-		
 		let drawSize = attr.size()
 		
-		drawRect.origin.x = gutterWidth - drawSize.width - 4
-        drawRect.origin.y += (drawRect.height - drawSize.height)
+		drawRect.origin.x = rect.width - drawSize.width - 4
 		drawRect.size.width = drawSize.width
 		drawRect.size.height = drawSize.height
         

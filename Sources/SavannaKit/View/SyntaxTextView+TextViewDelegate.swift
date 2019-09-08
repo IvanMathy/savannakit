@@ -155,10 +155,8 @@ extension SyntaxTextView: NSTextViewDelegate {
                 return delegate.lexerForSource(source)
             })
         }
-        
-        wrapperView.setNeedsDisplay(wrapperView.bounds)
+        self.rulerView?.needsDisplay = true
         self.delegate?.didChangeText(self)
-        
     }
     
     open func textViewDidChangeSelection(_ notification: Notification) {

@@ -104,11 +104,14 @@ struct MyToken: Token {
 class MyTheme: SyntaxColorTheme {
     
     private static var lineNumbersColor: Color {
-        return Color(red: 100/255, green: 100/255, blue: 100/255, alpha: 1.0)
+        return Color(red: 85/255, green: 86/255, blue: 100/255, alpha: 1.0)
     }
     
     let lineNumbersStyle: LineNumbersStyle? = LineNumbersStyle(font: Font(name: "Menlo", size: 16)!, textColor: lineNumbersColor)
-    let gutterStyle: GutterStyle = GutterStyle(backgroundColor: Color(red: 21/255.0, green: 22/255, blue: 31/255, alpha: 1.0), minimumWidth: 32)
+    let gutterStyle: GutterStyle = GutterStyle(
+        backgroundColor: Color(red: 21/255.0, green: 22/255, blue: 31/255, alpha: 1.0),
+        separatorColor: Color(red: 15/255.0, green: 16/255, blue: 20/255, alpha: 1.0),
+        minimumWidth: 40)
     
     let font = Font(name: "Menlo", size: 15)!
     

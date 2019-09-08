@@ -51,36 +51,10 @@ final class InnerTextView: NSTextView {
 		cachedParagraphs = nil
 	}
 	
-	func hideGutter() {
-		gutterWidth = theme?.gutterStyle.minimumWidth ?? 0.0
-	}
-	
-	func updateGutterWidth(for numberOfCharacters: Int) {
-		
-		let leftInset: CGFloat = 4.0
-		let rightInset: CGFloat = 4.0
-		
-		let charWidth: CGFloat = 10.0
-		
-		gutterWidth = max(theme?.gutterStyle.minimumWidth ?? 0.0, CGFloat(numberOfCharacters) * charWidth + leftInset + rightInset)
-	}
-	
-    // Gutters are by default symetrical, so we divide the value by
-    // 2 and shift the contents with textContainerOrigin to make it
-    // asymetric instead
-    
-	var gutterWidth: CGFloat {
-		set {
-            textContainerInset = NSSize(width: newValue / 2, height: 0)
-		}
-		get {
-            return textContainerInset.width * 2
-		}
-	}
     
     override var textContainerOrigin: NSPoint {
         get {
-            return NSPoint(x: gutterWidth, y: 0)
+            return NSPoint(x: 5, y: 0)
         }
     }
     
