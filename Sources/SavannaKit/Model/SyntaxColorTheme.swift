@@ -52,4 +52,7 @@ public protocol SyntaxColorTheme {
 	func globalAttributes() -> [NSAttributedString.Key: Any]
 
 	func attributes(for token: Token) -> [NSAttributedString.Key: Any]
+    
+    // How many spaces to make a tab
+    var tabWidth: Int { get }
 }

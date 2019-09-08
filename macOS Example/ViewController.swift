@@ -107,6 +107,8 @@ class MyTheme: SyntaxColorTheme {
         return Color(red: 85/255, green: 86/255, blue: 100/255, alpha: 1.0)
     }
     
+    var tabWidth: Int = 4
+    
     let lineNumbersStyle: LineNumbersStyle? = LineNumbersStyle(font: Font(name: "Menlo", size: 16)!, textColor: lineNumbersColor)
     let gutterStyle: GutterStyle = GutterStyle(
         backgroundColor: Color(red: 21/255.0, green: 22/255, blue: 31/255, alpha: 1.0),

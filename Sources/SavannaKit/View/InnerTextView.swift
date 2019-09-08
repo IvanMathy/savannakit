@@ -50,7 +50,26 @@ final class InnerTextView: NSTextView {
 	func invalidateCachedParagraphs() {
 		cachedParagraphs = nil
 	}
+    
+    override func insertBacktab(_ sender: Any?) {
+        // TODO: Handle this
+    }
 	
+    
+    override func insertTab(_ sender: Any?) {
+        
+        self.undoManager?.beginUndoGrouping()
+        
+        var range = self.selectedRange
+        
+        let spaces = String(repeating: " ", count: theme?.tabWidth ?? 4)
+        
+        self.insertText(spaces, replacementRange: range)
+        
+        self.undoManager?.endUndoGrouping()
+        
+        // TODO: Add selection tabbing support
+    }
     
     override var textContainerOrigin: NSPoint {
         get {
