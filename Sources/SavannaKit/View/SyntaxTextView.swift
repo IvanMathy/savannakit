@@ -160,6 +160,7 @@ open class SyntaxTextView: View {
         textView.isAutomaticQuoteSubstitutionEnabled = false
         textView.isAutomaticDashSubstitutionEnabled = false
         textView.allowsUndo = true
+        textView.usesFindBar = true
         
         textView.textContainer?.containerSize = NSSize(width: self.bounds.width, height: .greatestFiniteMagnitude)
         textView.textContainer?.widthTracksTextView = true
@@ -412,6 +413,10 @@ open class SyntaxTextView: View {
 			
 			textStorage.addAttributes(theme.attributes(for: token), range: range)
 		}
+        
+        // Taken from brunophilipe/savannakit
+        // Cleanup attributes. Good practice after applying many attributes at once.
+        textStorage.fixAttributes(in: wholeRange)
 		
 		textStorage.endEditing()
 		
