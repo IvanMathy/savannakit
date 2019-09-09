@@ -54,7 +54,56 @@ final class InnerTextView: NSTextView {
     override func insertBacktab(_ sender: Any?) {
         // TODO: Handle this
     }
+    
+    override func insertText(_ insertString: Any) {
+        
+        switch insertString as? String {
+        case "[":
+            insertAfter(insertString, "]")
+        case "{":
+            insertAfter(insertString, "}")
+        case "(":
+            insertAfter(insertString, ")")
+        case "\"":
+            insertQuotes(insertString, "\"")
+        case "'":
+            insertQuotes(insertString, "'")
+        default:
+            self.insertText(insertString, replacementRange: self.selectedRange)
+        }
+        
+    }
+    
+    private func insertAfter(_ before: Any, _ after: String) {
+        
+        self.insertText(before, replacementRange: self.selectedRange)
+        self.insertText(after, replacementRange: self.selectedRange)
+        self.moveBackward(self)
+    }
+    
+    private func insertQuotes(_ before: Any, _ after: String) {
+        
+        guard self.selectedRange.length > 0 else {
+            insertAfter(before, after)
+            return
+        }
+        
+        var originalRange = self.selectedRange
+        var targetRange = originalRange
+        targetRange.length = 0
+        
+        self.insertText(before, replacementRange: targetRange)
+        
+        targetRange.location = originalRange.upperBound + 1
+        
+        self.insertText(after, replacementRange: targetRange)
+        
+        originalRange.location += 1
+        
+        self.setSelectedRange(originalRange)
+    }
 	
+    
     
     override func insertTab(_ sender: Any?) {
         
