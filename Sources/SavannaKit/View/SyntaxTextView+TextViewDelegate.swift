@@ -131,9 +131,44 @@ extension SyntaxTextView: NSTextViewDelegate {
     
     open func textView(_ textView: NSTextView, shouldChangeTextIn affectedCharRange: NSRange, replacementString: String?) -> Bool {
         
-        let text = replacementString ?? ""
+        guard replacementString == "\n" else {
+            return true
+        }
+            
+        let nsText = textView.text as NSString
         
-        return self.shouldChangeText(insertingText: text)
+        var currentLine = nsText.substring(with: nsText.lineRange(for: textView.selectedRange))
+        
+        if currentLine.hasSuffix("\n") {
+            currentLine.removeLast()
+        }
+        
+        var newLinePrefix = ""
+        
+        for char in currentLine {
+            
+            let tempSet = CharacterSet(charactersIn: "\(char)")
+            
+            if tempSet.isSubset(of: .whitespacesAndNewlines) {
+                newLinePrefix += "\(char)"
+            } else {
+                break
+            }
+
+        }
+        
+        if !newLinePrefix.isEmpty {
+            textView.textStorage?.beginEditing()
+            
+            if textView.shouldChangeText(in:affectedCharRange, replacementString: newLinePrefix) {
+               textView.replaceCharacters(in: affectedCharRange, with: newLinePrefix)
+            }
+
+            textView.textStorage?.endEditing()
+
+        }
+        
+        return true
     }
     
     open func textDidChange(_ notification: Notification) {
@@ -169,132 +204,6 @@ extension SyntaxTextView: NSTextViewDelegate {
 
 extension SyntaxTextView {
 
-	func shouldChangeText(insertingText: String) -> Bool {
-
-		let selectedRange = textView.selectedRange
-
-		let origInsertingText = insertingText
-
-		var insertingText = insertingText
-		
-		if insertingText == "\n" {
-			
-			let nsText = textView.text as NSString
-			
-			var currentLine = nsText.substring(with: nsText.lineRange(for: textView.selectedRange))
-			
-			if currentLine.hasSuffix("\n") {
-				currentLine.removeLast()
-			}
-			
-			var newLinePrefix = ""
-			
-			for char in currentLine {
-				
-				let tempSet = CharacterSet(charactersIn: "\(char)")
-				
-				if tempSet.isSubset(of: .whitespacesAndNewlines) {
-					newLinePrefix += "\(char)"
-				} else {
-					break
-				}
-
-			}
-			
-			insertingText += newLinePrefix
-		}
-		
-		guard let textStorage = textView.textStorage else {
-			return true
-		}
-		
-		guard let cachedTokens = cachedTokens else {
-			return true
-		}
-			
-		for token in cachedTokens {
-			
-			let range = token.nsRange
-			
-			if token.token.isEditorPlaceholder {
-				
-				// Allow editorPlaceholder to be completely deleted.
-				if insertingText == "", selectedRange.lowerBound == range.upperBound {
-					textStorage.replaceCharacters(in: range, with: insertingText)
-					
-					didUpdateText()
-					
-					updateSelectedRange(NSRange(location: range.lowerBound, length: 0))
-
-					return false
-				}
-
-				if isEditorPlaceholderSelected(selectedRange: selectedRange, tokenRange: range) {
-					
-					if insertingText == "\t" {
-						
-						let placeholderTokens = cachedTokens.filter({
-							$0.token.isEditorPlaceholder
-						})
-						
-						guard placeholderTokens.count > 1 else {
-							return false
-						}
-						
-						let nextPlaceholderToken = placeholderTokens.first(where: {
-							
-							let nsRange = $0.nsRange
-							
-							return nsRange.lowerBound > range.lowerBound
-							
-						})
-						
-						if let tokenToSelect = nextPlaceholderToken ?? placeholderTokens.first {
-							
-							updateSelectedRange(NSRange(location: tokenToSelect.nsRange.lowerBound + 1, length: 0))
-							
-							return false
-							
-						}
-						
-						return false
-					}
-					
-					if selectedRange.location <= range.location || selectedRange.upperBound >= range.upperBound {
-						// Editor placeholder is part of larger selected text,
-						// so allow system inserting.
-						return true
-					}
-					
-//					(textView.undoManager?.prepare(withInvocationTarget: self) as? TextView).replace
-					
-					textStorage.replaceCharacters(in: range, with: insertingText)
-					
-					didUpdateText()
-					
-					updateSelectedRange(NSRange(location: range.lowerBound + insertingText.count, length: 0))
-
-					return false
-				}
-				
-			}
-			
-		}
-		
-		if origInsertingText == "\n" {
-
-			textStorage.replaceCharacters(in: selectedRange, with: insertingText)
-			
-			didUpdateText()
-			
-			updateSelectedRange(NSRange(location: selectedRange.lowerBound + insertingText.count, length: 0))
-
-			return false
-		}
-		
-		return true
-	}
-	
 	func contentDidChangeSelection() {
 		
 		if ignoreSelectionChange {

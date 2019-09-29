@@ -192,14 +192,7 @@ open class SyntaxTextView: View {
 	}
 	
 	// MARK: -
-	
-	public func insertText(_ text: String) {
-		
-		if shouldChangeText(insertingText: text) {
-			
-			contentTextView.insertText(text)
-		}        
-	}
+
 
 	public var theme: SyntaxColorTheme? {
 		didSet {

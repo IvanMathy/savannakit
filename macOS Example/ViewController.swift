@@ -21,6 +21,7 @@ class MacViewController: NSViewController {
         
         syntaxTextView.delegate = self
         syntaxTextView.theme = MyTheme()
+        syntaxTextView.allowsAutocomplete = false
         
         syntaxTextView.text = """
         This is an example of SavannaKit.
