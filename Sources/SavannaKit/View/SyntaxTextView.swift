@@ -111,9 +111,6 @@ open class SyntaxTextView: View {
     public let scrollView = NSScrollView()
 	
 	private func setup() {
-	
-		//textView.gutterWidth = 20
-        
         
         scrollView.backgroundColor = .clear
         scrollView.drawsBackground = false
@@ -165,10 +162,24 @@ open class SyntaxTextView: View {
             scrollView.verticalRulerView = rulerView
             scrollView.hasVerticalRuler = true
             scrollView.rulersVisible = true
+            
+            scrollView.contentView.postsBoundsChangedNotifications = true
+            
+            NotificationCenter.default.addObserver(self,
+                selector: #selector(scrollViewDidResize(_:)),
+                name: NSView.boundsDidChangeNotification,
+                object: scrollView.contentView)
         }
         
 		textView.text = ""
+        
+        
 	}
+    
+    @objc public func scrollViewDidResize(_ notification: NSNotification) {
+        textView.scrollViewDidResize(scrollView)
+    }
+
     
     @objc func renewLines(_ notification: Notification) {
         self.textView.invalidateCachedParagraphs()

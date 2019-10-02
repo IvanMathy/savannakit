@@ -120,12 +120,6 @@ final class InnerTextView: NSTextView {
         // TODO: Add selection tabbing support
     }
     
-    override var textContainerOrigin: NSPoint {
-        get {
-            return NSPoint(x: 5, y: 0)
-        }
-    }
-    
     override func didChangeText() {
         
         super.didChangeText()
@@ -182,5 +176,22 @@ final class InnerTextView: NSTextView {
         
         return Array(set)
         
+    }
+    
+    // Overscroll
+    // Inspired by https://christiantietze.de
+    
+    public func scrollViewDidResize(_ scrollView: NSScrollView) {
+        let offset = scrollView.bounds.height / 4
+        textContainerInset = NSSize(width: 0, height: offset)
+        overscrollY = offset
+    }
+
+    var overscrollY: CGFloat = 0
+
+    override var textContainerOrigin: NSPoint {
+        return super
+            .textContainerOrigin
+            .applying(.init(translationX: 0, y: -overscrollY))
     }
 }
