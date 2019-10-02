@@ -1,3 +1,24 @@
+This repository is a fork of louisdh's SavannaKit. It is built to be the editor within <a href="/ivanmathy/Boop">Boop</a>. This repository is not intended to be a successor or replacement to the original; simply a fork that fits Boop's needs.
+
+Overall, this fork has the following changes:
+
+- Replaced the line numbering with a ruler view
+- Added search/replace support
+- Fixed Undo/Redo
+- Added tabs to spaces replacement
+- Added automatic brackets/parenthesis/quotes closing
+- Added overscroll support
+
+This fork also removes the following features for compatibility reasons:
+
+- iOS support
+- Code placeholders
+- Some delegate functions
+
+
+The original repo is not maintained anymore, but here's the original readme for reference:
+
+
 <p align="center">
   <a href="https://github.com/louisdh/lioness">Lioness</a> &bull;
   <a href="https://github.com/louisdh/cub">Cub</a> &bull;

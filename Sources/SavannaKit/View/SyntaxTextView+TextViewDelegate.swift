@@ -17,9 +17,6 @@ extension SyntaxTextView: InnerTextViewDelegate {
 		selectionDidChange()
 		
 	}
-    func shouldAutocomplete() -> Bool {
-        return allowsAutocomplete
-    }
 	
 }
 
