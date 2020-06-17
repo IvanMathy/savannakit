@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
 	name: "SavannaKit",
     platforms: [
-        .macOS(.v10_15)
+        .macOS(.v10_14)
     ],
     products: [
         .library(name: "SavannaKit", type: .dynamic, targets: ["SavannaKit"])
