@@ -74,7 +74,21 @@ final class InnerTextView: NSTextView {
     
     private func insertAfter(_ before: Any, _ after: String) {
         
+        // Skip the second char to avoid duplicates
+        var skipAfter = false
+        
+        let end = self.text.index(self.text.startIndex, offsetBy: selectedRange().upperBound, limitedBy: self.text.index(before: self.text.endIndex))
+        
+        if let end = end, String(self.text[end]) == after {
+            skipAfter = true
+        }
+        
         self.insertText(before, replacementRange: self.selectedRange)
+        
+        guard !skipAfter else {
+            return
+        }
+        
         self.insertText(after, replacementRange: self.selectedRange)
         self.moveBackward(self)
     }
