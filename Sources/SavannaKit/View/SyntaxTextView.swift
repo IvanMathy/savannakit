@@ -19,6 +19,8 @@ public protocol SyntaxTextViewDelegate: class {
 	func textViewDidBeginEditing(_ syntaxTextView: SyntaxTextView)
 	
 	func lexerForSource(_ source: String) -> Lexer
+    
+    func theme(for appearance: NSAppearance) -> SyntaxColorTheme
 }
 
 // Provide default empty implementations of methods that are optional.
@@ -59,6 +61,7 @@ open class SyntaxTextView: View {
 	public weak var delegate: SyntaxTextViewDelegate? {
 		didSet {
 			didUpdateText()
+            self.theme = delegate?.theme(for: self.effectiveAppearance)
 		}
 	}
 	
@@ -104,6 +107,8 @@ open class SyntaxTextView: View {
     public let scrollView = NSScrollView()
 	
 	private func setup() {
+        
+        
         
         scrollView.backgroundColor = .clear
         scrollView.drawsBackground = false
@@ -165,8 +170,6 @@ open class SyntaxTextView: View {
         }
         
 		textView.text = ""
-        
-        
 	}
     
     @objc public func scrollViewDidResize(_ notification: NSNotification) {
@@ -177,6 +180,13 @@ open class SyntaxTextView: View {
     @objc func renewLines(_ notification: Notification) {
         self.textView.invalidateCachedParagraphs()
         rulerView?.needsDisplay = true
+    }
+    
+    @available(OSXApplicationExtension 10.14, *)
+    open override func viewDidChangeEffectiveAppearance() {
+        super.viewDidChangeEffectiveAppearance()
+        
+        self.theme = delegate?.theme(for: self.effectiveAppearance)
     }
 
 	// MARK: -

@@ -1,4 +1,4 @@
-This repository is a fork of louisdh's SavannaKit. It is built to be the editor within <a href="/ivanmathy/Boop">Boop</a>. This repository is not intended to be a successor or replacement to the original; simply a fork that fits Boop's needs.
+This repository is a fork of louisdh's SavannaKit. It is built to be the editor within <a href="https://github.com/ivanmathy/Boop">Boop</a>. This repository is not intended to be a successor or replacement to the original; simply a fork that fits Boop's needs.
 
 Overall, this fork has the following changes:
 
@@ -8,6 +8,7 @@ Overall, this fork has the following changes:
 - Added tabs to spaces replacement
 - Added automatic brackets/parenthesis/quotes closing
 - Added overscroll support
+- Added light/dark mode switching
 
 This fork also removes the following features for compatibility reasons:
 

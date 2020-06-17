@@ -20,7 +20,6 @@ class MacViewController: NSViewController {
         super.viewDidLoad()
         
         syntaxTextView.delegate = self
-        syntaxTextView.theme = MyTheme()
         
         syntaxTextView.text = """
         This is an example of SavannaKit.
@@ -32,6 +31,10 @@ class MacViewController: NSViewController {
 }
 
 extension MacViewController: SyntaxTextViewDelegate {
+    func theme(for appearance: NSAppearance) -> SyntaxColorTheme {
+        return MyTheme(appearance: appearance)
+    }
+    
     
     public func didChangeText(_ syntaxTextView: SyntaxTextView) {
         
@@ -101,7 +104,9 @@ struct MyToken: Token {
     
 }
 
-class MyTheme: SyntaxColorTheme {
+struct MyTheme: SyntaxColorTheme {
+    
+    let appearance: NSAppearance
     
     private static var lineNumbersColor: Color {
         return Color(red: 85/255, green: 86/255, blue: 100/255, alpha: 1.0)
@@ -117,14 +122,25 @@ class MyTheme: SyntaxColorTheme {
     
     let font = Font(name: "Menlo", size: 15)!
     
-    let backgroundColor = Color(red: 31/255.0, green: 32/255, blue: 41/255, alpha: 1.0)
+    var backgroundColor: Color {
+        if appearance.bestMatch(from: [.darkAqua]) == .darkAqua {
+            return Color(red: 31/255.0, green: 32/255, blue: 41/255, alpha: 1.0)
+        } else {
+            return .white
+        }
+    }
     
     func globalAttributes() -> [NSAttributedString.Key: Any] {
         
         var attributes = [NSAttributedString.Key: Any]()
         
         attributes[.font] = Font(name: "Menlo", size: 15)!
-        attributes[.foregroundColor] = NSColor.white
+        if appearance.bestMatch(from: [.darkAqua]) == .darkAqua {
+            attributes[.foregroundColor] = NSColor.white
+            
+        } else {
+            attributes[.foregroundColor] = NSColor.black
+        }
         
         return attributes
     }
@@ -139,11 +155,16 @@ class MyTheme: SyntaxColorTheme {
         
         switch myToken.type {
         case .longWord:
-            attributes[.foregroundColor] = NSColor.red
+            
+            if appearance.bestMatch(from: [.darkAqua]) == .darkAqua {
+                attributes[.foregroundColor] = NSColor.red
+            } else {
+                attributes[.foregroundColor] = NSColor.blue
+            }
+            
             
         case .shortWord:
-            attributes[.foregroundColor] = NSColor.white
-            
+            break
         }
         
         return attributes
