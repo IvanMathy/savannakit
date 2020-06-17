@@ -52,8 +52,6 @@
 		2C7B49F72285072600030962 /* macOS_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS_Example.entitlements; sourceTree = "<group>"; };
 		2C7B49FC2285085C00030962 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		BE15626E1EFE9E7C00EB3723 /* SavannaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SavannaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BE2055211F1D53C00051EE97 /* Lioness.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lioness.framework; path = "../../../Library/Developer/Xcode/DerivedData/Pixure-cgdlqshesrvljvcaumkelrnmbwqn/Build/Products/Release/Lioness.framework"; sourceTree = "<group>"; };
-		BE2055231F1D56AE0051EE97 /* Lioness.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lioness.framework; path = "../../../Library/Developer/Xcode/DerivedData/SavannaKit-fyzqygnhrdukxucyxotmtknnxggx/Build/Products/Release/Lioness.framework"; sourceTree = "<group>"; };
 		BE21904A2053318600BFB99A /* SyntaxTextViewLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxTextViewLayoutManager.swift; sourceTree = "<group>"; };
 		BE4280372038C38900C8FE24 /* SyntaxTextView+TextViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyntaxTextView+TextViewDelegate.swift"; sourceTree = "<group>"; };
 		BE42803A2038C3AA00C8FE24 /* Paragraphs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paragraphs.swift; sourceTree = "<group>"; };
@@ -167,8 +165,6 @@
 		BEDA3F441E380FCD00B5091C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BE2055231F1D56AE0051EE97 /* Lioness.framework */,
-				BE2055211F1D53C00051EE97 /* Lioness.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -317,6 +313,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);

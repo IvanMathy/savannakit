@@ -1,5 +1,16 @@
+// swift-tools-version:5.2
+
 import PackageDescription
 
 let package = Package(
-	name: "SavannaKit"
+	name: "SavannaKit",
+    platforms: [
+        .macOS(.v10_15)
+    ],
+    products: [
+        .library(name: "SavannaKit", type: .dynamic, targets: ["SavannaKit"])
+    ],
+    targets: [
+        .target(name: "SavannaKit")
+    ]
 )
