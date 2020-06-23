@@ -77,11 +77,14 @@ final class InnerTextView: NSTextView {
         // Skip the second char to avoid duplicates
         var skipAfter = false
         
-        let end = self.text.index(self.text.startIndex, offsetBy: selectedRange().upperBound, limitedBy: self.text.index(before: self.text.endIndex))
-        
-        if let end = end, String(self.text[end]) == after {
-            skipAfter = true
+        if self.text.startIndex != self.text.endIndex {
+            let end = self.text.index(self.text.startIndex, offsetBy: selectedRange().upperBound, limitedBy: self.text.index(before: self.text.endIndex))
+            
+            if let end = end, String(self.text[end]) == after {
+                skipAfter = true
+            }
         }
+        
         
         self.insertText(before, replacementRange: self.selectedRange)
         
