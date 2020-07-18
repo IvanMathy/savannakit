@@ -69,7 +69,7 @@
 		BEE5D94A2027887E0040C72A /* Lexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lexer.swift; sourceTree = "<group>"; };
 		BEE6D380209A29CE00E881D9 /* NSMutableAttributedString+Tokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Tokens.swift"; sourceTree = "<group>"; };
 		BEE6D387209A312400E881D9 /* SavannaKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SavannaKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BEE6D389209A312400E881D9 /* SavannaKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavannaKitTests.swift; sourceTree = "<group>"; };
+		BEE6D389209A312400E881D9 /* SavannaKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SavannaKitTests.swift; path = ../Sources/SavannaKitTests/SavannaKitTests.swift; sourceTree = "<group>"; };
 		BEE6D38B209A312400E881D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -303,7 +303,6 @@
 					};
 					BEE6D386209A312400E881D9 = {
 						CreatedOnToolsVersion = 9.3;
-						DevelopmentTeam = 6G5LMQ72D8;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -313,6 +312,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -651,13 +651,13 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 6G5LMQ72D8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = SavannaKitTests/Info.plist;
+				INFOPLIST_FILE = Sources/SavannaKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = be.silverfox.SavannaKitTests;
@@ -674,13 +674,13 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 6G5LMQ72D8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = SavannaKitTests/Info.plist;
+				INFOPLIST_FILE = Sources/SavannaKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = be.silverfox.SavannaKitTests;
