@@ -14,7 +14,7 @@ class MacViewController: NSViewController {
     
     @IBOutlet weak var syntaxTextView: SyntaxTextView!
     
-    let lexer = MyLexer()
+    let lexer = BoopLexer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ class MacViewController: NSViewController {
 
 extension MacViewController: SyntaxTextViewDelegate {
     func theme(for appearance: NSAppearance) -> SyntaxColorTheme {
-        return MyTheme(appearance: appearance)
+        return DefaultTheme(appearance: appearance)
     }
     
     

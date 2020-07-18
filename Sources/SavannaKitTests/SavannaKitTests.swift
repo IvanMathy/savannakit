@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import SavannaKit
+import Foundation
 
 class SavannaKitTests: XCTestCase {
     
@@ -22,7 +23,18 @@ class SavannaKitTests: XCTestCase {
     }
 
 	func testAttributedText() {
-	
+        
+        let url = Bundle(for: type(of: self)).url(forResource: "BoopGithub", withExtension: "html", subdirectory: nil)
+        
+        let string = try! String(contentsOf: url!)
+        
+        let lexer = BoopLexer()
+        
+        // First run: 424s; 7 minutes.
+        
+        measure {
+            lexer.getSavannaTokens(input: string)
+        }
 	}
     
 }
