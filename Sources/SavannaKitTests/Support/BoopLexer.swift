@@ -21,13 +21,7 @@ class BoopLexer: RegexLexer {
     
     func generators(source: String) -> [TokenGenerator] {
         
-        let standalonePrefix = "(?<=[\\s]|^|[\\(,:])"
-        let standaloneSuffix = "(?=[\\s\\?\\!,:\\)\\();]|$)"
-        
-        let quoteLookahead = "(?=(?:(?:[^\"]*\"){2})*[^\"]*$)"
-        
-        let quotes = "(\"|@\")(?:[^\"\\\\\\n]|\\\\.)*[^\"\\n]*(@\"|\")"
-        let number = "\\b(?:0x[a-f0-9]+|(?:\\d(?:_\\d+)*\\d*(?:\\.\\d*)?|\\.\\d\\+)(?:e[+\\-]?\\d+)?)\\b"
+        let number = #"\b(?:0x[a-f0-9]+|(?:\d(?:_\d+)*\d*(?:\.\d*)?|\.\d\+)(?:e[+\-]?\d+)?)\b"#
         
         
         var generators = [TokenGenerator?]()
@@ -36,27 +30,29 @@ class BoopLexer: RegexLexer {
         
         // Find common attributes
         
-        generators.append(regexToken(.attribute, "\(standalonePrefix)(\(commonAttributes.joined(separator: "|")))\(standaloneSuffix)", options: .caseInsensitive))
+        generators.append(regexToken(.attribute, commonAttributes.joined(separator: "|"), options: .caseInsensitive))
         
-        generators.append(regexToken(.keyword, "\(standalonePrefix)(\(moreAttributes.joined(separator: "|")))\(standaloneSuffix)", options: .caseInsensitive))
+        generators.append(regexToken(.keyword, moreAttributes.joined(separator: "|"), options: .caseInsensitive))
         
         
         // Extras
         
         let UTCDate = "(?:(Sun|Mon|Tue|Wed|Thu|Fri|Sat),\\s+)?(0[1-9]|[1-2]?[0-9]|3[01])\\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s+(19[0-9]{2}|[2-9][0-9]{3})\\s+(2[0-3]|[0-1][0-9]):([0-5][0-9])(?::(60|[0-5][0-9]))?\\s+([-\\+][0-9]{2}[0-5][0-9]|(?:UT|GMT|(?:E|C|M|P)(?:ST|DT)|[A-IK-Z]))"
         
-        generators.append(regexToken(.number, "\(standalonePrefix)(\(UTCDate))\(standaloneSuffix)"))
+        generators.append(regexToken(.number, UTCDate))
         
         // - Match MD5 strings
-        generators.append(regexToken(.keyword, "\(standalonePrefix)([a-f0-9]{32})\(standaloneSuffix)"))
+        generators.append(regexToken(.keyword, "[a-f0-9]{32}"))
         
         // - Bootleg XML-like tags match:
         
-        generators.append(regexToken(.attribute, "(?m)\(quoteLookahead)<(?:.*?)\\b[^>]*\\/?>"))
+        generators.append(regexToken(.attribute, "<(?:.*?)\\b[^>]*\\/?>"))
         
         // Strings
         
-        generators.append(regexToken(.string, quotes, options: [.dotMatchesLineSeparators, .caseInsensitive]))
+        let quotes = #"(["'])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1"#
+        
+        generators.append(regexToken(.string, quotes))
         
         generators.append(regexToken(.string, "`(?:[^`\\\\\\n]|\\\\.)*[^`\\n]*`", options: [.dotMatchesLineSeparators, .caseInsensitive]))
         
@@ -67,17 +63,17 @@ class BoopLexer: RegexLexer {
         // More Extras
         
         // - Match JSON labels and generic parameters
-        generators.append(regexToken(.extra, "(?m)\(quoteLookahead)(?=(?:[ {\\[]*))([^\\r\\n:\\s\\w]+?|\(quotes))\\s*(?=\\:(?!\\:))"))
+        generators.append(regexToken(.extra, "(?=(?:[ {\\[]*))([^\\r\\n:\\s\\w]+?|\(quotes))\\s*(?=\\:(?!\\:))"))
         
         
         
         // Comments
         
-        generators.append(regexToken(.comment, "\(quoteLookahead)//(.*)"))
+        generators.append(regexToken(.comment, #"(^|[^\\:])\/\/.*"#))
         
-        generators.append(regexToken(.comment, "\(quoteLookahead)/\\*.*?\\*/", options: [.dotMatchesLineSeparators, .caseInsensitive]))
+        generators.append(regexToken(.comment, #"(^|[^\\])\/\*[\s\S]*?(?:\*\/|$)"#, options: [.dotMatchesLineSeparators, .caseInsensitive]))
         
-        generators.append(regexToken(.comment, "\(quoteLookahead)<\\!--[\\s\\S]*?(?:-\\->|$)", options: [.dotMatchesLineSeparators, .caseInsensitive]))
+        //generators.append(regexToken(.comment, "\(quoteLookahead)<\\!--[\\s\\S]*?(?:-\\->|$)", options: [.dotMatchesLineSeparators, .caseInsensitive]))
         
       
         

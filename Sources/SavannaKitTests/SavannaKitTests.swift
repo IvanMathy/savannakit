@@ -22,7 +22,7 @@ class SavannaKitTests: XCTestCase {
         super.tearDown()
     }
 
-	func testAttributedText() {
+	func testOldGit() {
         
         let url = Bundle(for: type(of: self)).url(forResource: "BoopGithub", withExtension: "html", subdirectory: nil)
         
@@ -30,11 +30,27 @@ class SavannaKitTests: XCTestCase {
         
         let lexer = BoopLexer()
         
-        // First run: 424s; 7 minutes.
+        // First run: 43s
         
         measure {
             lexer.getSavannaTokens(input: string)
         }
 	}
+    
+    func testOldAlice() {
+        
+        let url = Bundle(for: type(of: self)).url(forResource: "AliceInWonderland", withExtension: "txt", subdirectory: nil)
+        
+        let string = try! String(contentsOf: url!)
+        
+        let lexer = BoopLexer()
+        
+        // Baseline: 9s
+        
+        measure {
+            lexer.getSavannaTokens(input: string)
+        }
+    }
+    
     
 }
