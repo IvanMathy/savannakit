@@ -31,9 +31,12 @@ class SavannaKitTests: XCTestCase {
         let lexer = BoopLexer()
         
         // First run: 43s
+        // First refactor: 0.171 s
+        // Second refactor: 0.149 s
+        // Third refactor: 0.136 s
         
         measure {
-            lexer.getSavannaTokens(input: string)
+            _ = lexer.getSavannaTokens(input: string)
         }
 	}
     
@@ -46,10 +49,28 @@ class SavannaKitTests: XCTestCase {
         let lexer = BoopLexer()
         
         // Baseline: 9s
+        // First refactor: 0.253 s
+        // Second refactor: 0.174 s
         
         measure {
             lexer.getSavannaTokens(input: string)
         }
+    }
+    
+    func testFullAlice() {
+        let url = Bundle(for: type(of: self)).url(forResource: "AliceInWonderland", withExtension: "txt", subdirectory: nil)
+               
+let string = try! String(contentsOf: url!)
+
+let lexer = BoopLexer()
+
+// Baseline: 9s
+// First refactor: 0.253 s
+// Second refactor: 0.174 s
+
+measure {
+   lexer.getSavannaTokens(input: string)
+}
     }
     
     

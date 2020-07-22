@@ -62,25 +62,25 @@ class MyLexer: Lexer {
         
         var tokens = [MyToken]()
         
-        input.enumerateSubstrings(in: input.startIndex..<input.endIndex, options: [.byWords]) { (word, range, _, _) in
-            
-            if let word = word {
-                
-                let type: MyTokenType
-                
-                if word.count > 6 {
-                    type = .longWord
-                } else {
-                    type = .shortWord
-                }
-                
-                let token = MyToken(type: type, isEditorPlaceholder: false, isPlain: false, range: range)
-                
-                tokens.append(token)
-                
-            }
-            
-        }
+//        input.enumerateSubstrings(in: input.startIndex..<input.endIndex, options: [.byWords]) { (word, range, _, _) in
+//            
+//            if let word = word {
+//                
+//                let type: MyTokenType
+//                
+//                if word.count > 6 {
+//                    type = .longWord
+//                } else {
+//                    type = .shortWord
+//                }
+//                
+//                let token = MyToken(type: type, isEditorPlaceholder: false, isPlain: false, range: range)
+//                
+//                tokens.append(token)
+//                
+//            }
+//            
+//        }
         
         return tokens
     }
@@ -93,6 +93,10 @@ enum MyTokenType {
 }
 
 struct MyToken: Token {
+    var isActive: Bool
+    
+    var startIndex: Int
+    
     
     let type: MyTokenType
     
@@ -100,7 +104,9 @@ struct MyToken: Token {
     
     let isPlain: Bool
     
-    let range: Range<String.Index>
+    let range: NSRange
+    
+    let isGreedy: Bool = false
     
 }
 

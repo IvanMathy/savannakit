@@ -30,9 +30,9 @@ class BoopLexer: RegexLexer {
         
         // Find common attributes
         
-        generators.append(regexToken(.attribute, commonAttributes.joined(separator: "|"), options: .caseInsensitive))
+        generators.append(regexToken(.attribute, #"\b(\#(commonAttributes.joined(separator: "|")))\b"#, options: .caseInsensitive))
         
-        generators.append(regexToken(.keyword, moreAttributes.joined(separator: "|"), options: .caseInsensitive))
+        generators.append(regexToken(.keyword, #"\b(\#(moreAttributes.joined(separator: "|")))\b"#, options: .caseInsensitive))
         
         
         // Extras
@@ -50,13 +50,9 @@ class BoopLexer: RegexLexer {
         
         // Strings
         
-        let quotes = #"(["'])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1"#
+        let quotes = #"(["'`])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1"#
         
-        generators.append(regexToken(.string, quotes))
-        
-        generators.append(regexToken(.string, "`(?:[^`\\\\\\n]|\\\\.)*[^`\\n]*`", options: [.dotMatchesLineSeparators, .caseInsensitive]))
-        
-        generators.append(regexToken(.string, "'(?:[^\'\\\\\\n]|\\\\.)*[^\'\\n]*'", options: [.dotMatchesLineSeparators, .caseInsensitive]))
+        generators.append(regexToken(.string, quotes, greedy: true))
         
         generators.append(regexToken(.string, "(\"\"\")(.*?)(\"\"\")", options: [.dotMatchesLineSeparators, .caseInsensitive]))
         
@@ -69,7 +65,7 @@ class BoopLexer: RegexLexer {
         
         // Comments
         
-        generators.append(regexToken(.comment, #"(^|[^\\:])\/\/.*"#))
+        generators.append(regexToken(.comment, #"(?=(\/\/.*))"#))
         
         generators.append(regexToken(.comment, #"(^|[^\\])\/\*[\s\S]*?(?:\*\/|$)"#, options: [.dotMatchesLineSeparators, .caseInsensitive]))
         
@@ -81,12 +77,12 @@ class BoopLexer: RegexLexer {
         return generators.compactMap( { $0 })
     }
     
-    func regexToken(_ type: BoopToken.TokenType, _ pattern:String, options: NSRegularExpression.Options = .caseInsensitive) -> TokenGenerator? {
+    func regexToken(_ type: BoopToken.TokenType, _ pattern:String, options: NSRegularExpression.Options = .caseInsensitive, greedy: Bool = false) -> TokenGenerator? {
         guard let regex = try? NSRegularExpression(pattern: pattern, options: options) else {
             return nil
         }
         let generator = RegexTokenGenerator(regularExpression: regex, tokenTransformer: { (range) -> Token in
-            return BoopToken(type: type, range: range)
+            return BoopToken(type: type, range: range, greedy: greedy)
         })
         return TokenGenerator.regex(generator)
     }

@@ -21,7 +21,15 @@ public protocol Token {
 	var isPlain: Bool { get }
 	
 	/// The range of the token in the source string.
-	var range: Range<String.Index> { get }
+	var range: NSRange{ get }
+    
+    /// If a token is greedy, it will disable any token that overlaps
+    ///  with it and has a start range after this one.
+    var isGreedy: Bool { get }
+    
+    /// Whether the token is used for syntax highlighting
+    var isActive: Bool { get set }
+    
 	
 }
 

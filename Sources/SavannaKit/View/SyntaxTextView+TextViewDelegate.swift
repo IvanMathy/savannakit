@@ -193,7 +193,14 @@ extension SyntaxTextView: NSTextViewDelegate {
     
     open func textViewDidChangeSelection(_ notification: Notification) {
         
-        contentDidChangeSelection()
+        // Not quite sure why this was being called, and why it's re-highlighting
+        // everything... My best guess is that it was trying to change how editor
+        // tokens are rendered on selection. The issue is that selection technically
+        // changes when you type, so highlighting happens multiple times for each
+        // letter, which, on large documents, is not ideal. (although the duplicate
+        // uses cached tokens, so it's not as bad, but it's still not great.)
+        
+        //contentDidChangeSelection()
 
     }
     

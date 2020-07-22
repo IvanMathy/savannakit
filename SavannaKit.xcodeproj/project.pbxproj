@@ -13,11 +13,14 @@
 		2C157AFE24C38AFC00D5BDD0 /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C157AFD24C38AFC00D5BDD0 /* DefaultTheme.swift */; };
 		2C157B0024C38B0E00D5BDD0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C157AFF24C38B0E00D5BDD0 /* Colors.swift */; };
 		2C5AB3C92324A15D0060DCE9 /* LineRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AB3C82324A15D0060DCE9 /* LineRulerView.swift */; };
+		2C7A093924C68C0800596D31 /* NewBoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7A093724C68C0800596D31 /* NewBoopLexer.swift */; };
 		2C7B49F02285072300030962 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B49EF2285072300030962 /* AppDelegate.swift */; };
 		2C7B49F22285072600030962 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C7B49F12285072600030962 /* Assets.xcassets */; };
 		2C7B49F52285072600030962 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C7B49F32285072600030962 /* MainMenu.xib */; };
 		2C7B49FD2285085C00030962 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B49FC2285085C00030962 /* ViewController.swift */; };
 		2C7B49FE22850B8300030962 /* SavannaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE15626E1EFE9E7C00EB3723 /* SavannaKit.framework */; };
+		2C9276C624C68D3500576B1F /* NewBoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7A093724C68C0800596D31 /* NewBoopLexer.swift */; };
+		2C9276CA24C7B84100576B1F /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9276C924C7B84100576B1F /* PerformanceTests.swift */; };
 		2CD2D70024C3886E0091DD26 /* BoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD2D6FF24C3886D0091DD26 /* BoopLexer.swift */; };
 		2CD2D70824C388910091DD26 /* AliceInWonderland.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2CD2D70624C388910091DD26 /* AliceInWonderland.txt */; };
 		2CD2D70924C388910091DD26 /* BoopGithub.html in Resources */ = {isa = PBXBuildFile; fileRef = 2CD2D70724C388910091DD26 /* BoopGithub.html */; };
@@ -55,6 +58,7 @@
 		2C157AFD24C38AFC00D5BDD0 /* DefaultTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultTheme.swift; sourceTree = "<group>"; };
 		2C157AFF24C38B0E00D5BDD0 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		2C5AB3C82324A15D0060DCE9 /* LineRulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineRulerView.swift; sourceTree = "<group>"; };
+		2C7A093724C68C0800596D31 /* NewBoopLexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBoopLexer.swift; sourceTree = "<group>"; };
 		2C7B49ED2285072300030962 /* macOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "macOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C7B49EF2285072300030962 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C7B49F12285072600030962 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -62,6 +66,7 @@
 		2C7B49F62285072600030962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C7B49F72285072600030962 /* macOS_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS_Example.entitlements; sourceTree = "<group>"; };
 		2C7B49FC2285085C00030962 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2C9276C924C7B84100576B1F /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PerformanceTests.swift; path = Sources/SavannaKitTests/PerformanceTests.swift; sourceTree = SOURCE_ROOT; };
 		2CD2D6FF24C3886D0091DD26 /* BoopLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoopLexer.swift; sourceTree = "<group>"; };
 		2CD2D70624C388910091DD26 /* AliceInWonderland.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AliceInWonderland.txt; sourceTree = "<group>"; };
 		2CD2D70724C388910091DD26 /* BoopGithub.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = BoopGithub.html; sourceTree = "<group>"; };
@@ -134,6 +139,7 @@
 			children = (
 				2C157AF924C3891500D5BDD0 /* BoopToken.swift */,
 				2CD2D6FF24C3886D0091DD26 /* BoopLexer.swift */,
+				2C7A093724C68C0800596D31 /* NewBoopLexer.swift */,
 			);
 			name = Support;
 			path = Sources/SavannaKitTests/Support;
@@ -247,6 +253,7 @@
 				2CD2D70524C388910091DD26 /* TestCases */,
 				2CD2D6FE24C3886D0091DD26 /* Support */,
 				BEE6D389209A312400E881D9 /* SavannaKitTests.swift */,
+				2C9276C924C7B84100576B1F /* PerformanceTests.swift */,
 				BEE6D38B209A312400E881D9 /* Info.plist */,
 			);
 			path = SavannaKitTests;
@@ -404,6 +411,7 @@
 				2C157AFB24C38AB200D5BDD0 /* BoopToken.swift in Sources */,
 				2C7B49FD2285085C00030962 /* ViewController.swift in Sources */,
 				2C157AFC24C38AB200D5BDD0 /* BoopLexer.swift in Sources */,
+				2C9276C624C68D3500576B1F /* NewBoopLexer.swift in Sources */,
 				2C7B49F02285072300030962 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,6 +445,8 @@
 				2C157AFA24C3891500D5BDD0 /* BoopToken.swift in Sources */,
 				2CD2D70024C3886E0091DD26 /* BoopLexer.swift in Sources */,
 				BEE6D38A209A312400E881D9 /* SavannaKitTests.swift in Sources */,
+				2C9276CA24C7B84100576B1F /* PerformanceTests.swift in Sources */,
+				2C7A093924C68C0800596D31 /* NewBoopLexer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

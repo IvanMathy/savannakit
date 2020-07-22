@@ -8,7 +8,7 @@
 
 import Foundation
 
-public typealias TokenTransformer = (_ range: Range<String.Index>) -> Token
+public typealias TokenTransformer = (_ range: NSRange) -> Token
 
 public struct RegexTokenGenerator {
 	
@@ -82,8 +82,8 @@ extension RegexLexer {
 
 			if let word = word, generator.keywords.contains(word) {
 
-				let token = generator.tokenTransformer(range)
-				tokens.append(token)
+//                let token = generator.tokenTransformer(range, <#NSRange#>)
+//				tokens.append(token)
 
 			}
 
@@ -98,12 +98,15 @@ extension RegexLexer {
 
 		let fullNSRange = NSRange(location: 0, length: source.utf16.count)
 		for numberMatch in generator.regularExpression.matches(in: source, options: [], range: fullNSRange) {
-			
-			guard let swiftRange = Range(numberMatch.range, in: source) else {
-				continue
-			}
-			
-			let token = generator.tokenTransformer(swiftRange)
+            
+            var outRange = numberMatch.range
+            
+            if outRange.length == 0, numberMatch.numberOfRanges > 1 {
+                
+                outRange = numberMatch.range(at: 1)
+            }
+            
+            let token = generator.tokenTransformer(outRange)
 			tokens.append(token)
 			
 		}

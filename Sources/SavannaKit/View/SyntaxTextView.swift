@@ -263,7 +263,7 @@ open class SyntaxTextView: View {
 				
         textStorage = textView.textStorage!
 				
-		let tokens: [Token]
+        var tokens: [Token]
 		
 		if let cachedTokens = cachedTokens {
 			
@@ -280,14 +280,18 @@ open class SyntaxTextView: View {
 			}
 			
 			textView.font = theme.font
+            
+            
 
 			let lexer = lexerForSource(source)
 			tokens = lexer.getSavannaTokens(input: source)
+            
+            
+            toggleTokens(tokens: tokens)
 			
 			let cachedTokens: [CachedToken] = tokens.map {
-				
-				let nsRange = source.nsRange(fromRange: $0.range)
-				return CachedToken(token: $0, nsRange: nsRange)
+
+                return CachedToken(token: $0, nsRange: $0.range)
 			}
 
 			self.cachedTokens = cachedTokens
@@ -297,6 +301,33 @@ open class SyntaxTextView: View {
 		}
 		
 	}
+    
+    func toggleTokens(tokens: [Token]) {
+        let sortedTokens = tokens.sorted { (left, right) -> Bool in
+            left.range.lowerBound < right.range.lowerBound
+        }
+
+        guard let first = sortedTokens.first else {
+            // No token found.
+            return
+        }
+        
+        var currentToken = first
+        
+        var firstLoop = true
+
+        for var token in sortedTokens {
+
+            if currentToken.isGreedy,
+                currentToken.range.contains(token.range.location),
+                !firstLoop {
+                token.isActive = false
+            } else {
+                firstLoop = false
+                currentToken = token
+            }
+        }
+    }
 
 	func updateAttributes(textStorage: NSTextStorage, cachedTokens: [CachedToken], source: String) {
 
@@ -378,6 +409,10 @@ open class SyntaxTextView: View {
 			if token.isPlain {
 				continue
 			}
+            
+            guard token.isActive else {
+                continue
+            }
 			
 			let range = cachedToken.nsRange
 
