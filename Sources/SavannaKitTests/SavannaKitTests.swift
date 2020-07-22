@@ -56,22 +56,4 @@ class SavannaKitTests: XCTestCase {
             lexer.getSavannaTokens(input: string)
         }
     }
-    
-    func testFullAlice() {
-        let url = Bundle(for: type(of: self)).url(forResource: "AliceInWonderland", withExtension: "txt", subdirectory: nil)
-               
-let string = try! String(contentsOf: url!)
-
-let lexer = BoopLexer()
-
-// Baseline: 9s
-// First refactor: 0.253 s
-// Second refactor: 0.174 s
-
-measure {
-   lexer.getSavannaTokens(input: string)
-}
-    }
-    
-    
 }

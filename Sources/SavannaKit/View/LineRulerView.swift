@@ -34,8 +34,7 @@ class LineRulerView: NSRulerView {
         theme.gutterStyle.backgroundColor.setFill()
         
         guard
-            theme.lineNumbersStyle != nil,
-            let layoutManager = textView.layoutManager
+            theme.lineNumbersStyle != nil
             else {
                 let path = BezierPath(rect: rect)
                 path.fill()

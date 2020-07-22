@@ -48,18 +48,20 @@ class BoopLexer: RegexLexer {
         
         generators.append(regexToken(.attribute, "<(?:.*?)\\b[^>]*\\/?>"))
         
+        
+        // - Match JSON labels and generic parameters
+        generators.append(regexToken(.extra, #""([^"]+?)"\s*(?=:)"#, greedy: true))
+        
         // Strings
         
         let quotes = #"(["'`])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1"#
         
         generators.append(regexToken(.string, quotes, greedy: true))
         
-        generators.append(regexToken(.string, "(\"\"\")(.*?)(\"\"\")", options: [.dotMatchesLineSeparators, .caseInsensitive]))
+        generators.append(regexToken(.string, "(\"\"\")(.*?)(\"\"\")", options: [.dotMatchesLineSeparators, .caseInsensitive], greedy: true))
         
         // More Extras
         
-        // - Match JSON labels and generic parameters
-        generators.append(regexToken(.extra, "(?=(?:[ {\\[]*))([^\\r\\n:\\s\\w]+?|\(quotes))\\s*(?=\\:(?!\\:))"))
         
         
         
@@ -67,7 +69,7 @@ class BoopLexer: RegexLexer {
         
         generators.append(regexToken(.comment, #"(?=(\/\/.*))"#))
         
-        generators.append(regexToken(.comment, #"(^|[^\\])\/\*[\s\S]*?(?:\*\/|$)"#, options: [.dotMatchesLineSeparators, .caseInsensitive]))
+        generators.append(regexToken(.comment, #"(?=(\/\*[\s\S]*?(?:\*\/|$)))"#, options: [.dotMatchesLineSeparators], greedy: true))
         
         //generators.append(regexToken(.comment, "\(quoteLookahead)<\\!--[\\s\\S]*?(?:-\\->|$)", options: [.dotMatchesLineSeparators, .caseInsensitive]))
         
