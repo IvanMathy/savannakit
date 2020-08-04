@@ -60,8 +60,6 @@ class BoopLexer: RegexLexer {
         
         generators.append(regexToken(.string, "(\"\"\")(.*?)(\"\"\")", options: [.dotMatchesLineSeparators, .caseInsensitive], greedy: true))
         
-        // More Extras
-        
         
         
         

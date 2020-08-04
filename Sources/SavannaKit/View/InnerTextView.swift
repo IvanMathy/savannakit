@@ -53,23 +53,22 @@ final class InnerTextView: NSTextView {
         // TODO: Handle this
     }
     
-    override func insertText(_ insertString: Any) {
-        
-        switch insertString as? String {
-        case "[":
-            insertAfter(insertString, "]")
-        case "{":
-            insertAfter(insertString, "}")
-        case "(":
-            insertAfter(insertString, ")")
-        case "\"":
-            insertQuotes(insertString, "\"")
-        case "'":
-            insertQuotes(insertString, "'")
-        default:
-            self.insertText(insertString, replacementRange: self.selectedRange)
-        }
-        
+    
+    override func insertText(_ string: Any, replacementRange: NSRange) {
+        switch string as? String {
+           case "[":
+               insertAfter(string, "]")
+           case "{":
+               insertAfter(string, "}")
+           case "(":
+               insertAfter(string, ")")
+           case "\"":
+               insertQuotes(string, "\"")
+           case "'":
+               insertQuotes(string, "'")
+           default:
+               super.insertText(string, replacementRange: replacementRange)
+           }
     }
     
     private func insertAfter(_ before: Any, _ after: String) {
@@ -86,13 +85,13 @@ final class InnerTextView: NSTextView {
         }
         
         
-        self.insertText(before, replacementRange: self.selectedRange)
+        super.insertText(before, replacementRange: self.selectedRange)
         
         guard !skipAfter else {
             return
         }
         
-        self.insertText(after, replacementRange: self.selectedRange)
+        super.insertText(after, replacementRange: self.selectedRange)
         self.moveBackward(self)
     }
     
@@ -107,11 +106,11 @@ final class InnerTextView: NSTextView {
         var targetRange = originalRange
         targetRange.length = 0
         
-        self.insertText(before, replacementRange: targetRange)
+        super.insertText(before, replacementRange: targetRange)
         
         targetRange.location = originalRange.upperBound + 1
         
-        self.insertText(after, replacementRange: targetRange)
+        super.insertText(after, replacementRange: targetRange)
         
         originalRange.location += 1
         
@@ -126,7 +125,7 @@ final class InnerTextView: NSTextView {
         
         let spaces = String(repeating: " ", count: theme?.tabWidth ?? 4)
         
-        self.insertText(spaces, replacementRange: range)
+        super.insertText(spaces, replacementRange: range)
         
         self.undoManager?.endUndoGrouping()
         
