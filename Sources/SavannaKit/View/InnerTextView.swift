@@ -148,4 +148,8 @@ final class InnerTextView: NSTextView {
             .textContainerOrigin
             .applying(.init(translationX: 0, y: -overscrollY))
     }
+    
+    override var readablePasteboardTypes: [NSPasteboard.PasteboardType] {
+        return [.string]
+    }
 }
