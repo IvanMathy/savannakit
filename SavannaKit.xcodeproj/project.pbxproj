@@ -12,6 +12,7 @@
 		2C157AFC24C38AB200D5BDD0 /* BoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD2D6FF24C3886D0091DD26 /* BoopLexer.swift */; };
 		2C157AFE24C38AFC00D5BDD0 /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C157AFD24C38AFC00D5BDD0 /* DefaultTheme.swift */; };
 		2C157B0024C38B0E00D5BDD0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C157AFF24C38B0E00D5BDD0 /* Colors.swift */; };
+		2C4FD0C2277CADF700443D72 /* InnerTextView+MultilineEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4FD0C1277CADF700443D72 /* InnerTextView+MultilineEditing.swift */; };
 		2C5AB3C92324A15D0060DCE9 /* LineRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5AB3C82324A15D0060DCE9 /* LineRulerView.swift */; };
 		2C7A093924C68C0800596D31 /* NewBoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7A093724C68C0800596D31 /* NewBoopLexer.swift */; };
 		2C7B49F02285072300030962 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B49EF2285072300030962 /* AppDelegate.swift */; };
@@ -57,6 +58,7 @@
 		2C157AF924C3891500D5BDD0 /* BoopToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoopToken.swift; sourceTree = "<group>"; };
 		2C157AFD24C38AFC00D5BDD0 /* DefaultTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultTheme.swift; sourceTree = "<group>"; };
 		2C157AFF24C38B0E00D5BDD0 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		2C4FD0C1277CADF700443D72 /* InnerTextView+MultilineEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InnerTextView+MultilineEditing.swift"; sourceTree = "<group>"; };
 		2C5AB3C82324A15D0060DCE9 /* LineRulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineRulerView.swift; sourceTree = "<group>"; };
 		2C7A093724C68C0800596D31 /* NewBoopLexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBoopLexer.swift; sourceTree = "<group>"; };
 		2C7B49ED2285072300030962 /* macOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "macOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -215,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				BE71CB851F125D0400C6B93E /* InnerTextView.swift */,
+				2C4FD0C1277CADF700443D72 /* InnerTextView+MultilineEditing.swift */,
 				BE99F5FA1F07E6240076CDEF /* SyntaxTextView.swift */,
 				BE4280372038C38900C8FE24 /* SyntaxTextView+TextViewDelegate.swift */,
 				BE42803A2038C3AA00C8FE24 /* Paragraphs.swift */,
@@ -433,6 +436,7 @@
 				BE99F6091F07E6240076CDEF /* Types.swift in Sources */,
 				BE4280392038C38E00C8FE24 /* SyntaxTextView+TextViewDelegate.swift in Sources */,
 				BE99F6051F07E6240076CDEF /* SyntaxColorTheme.swift in Sources */,
+				2C4FD0C2277CADF700443D72 /* InnerTextView+MultilineEditing.swift in Sources */,
 				BEE5D94F2027897A0040C72A /* Token.swift in Sources */,
 				2C5AB3C92324A15D0060DCE9 /* LineRulerView.swift in Sources */,
 			);
