@@ -48,13 +48,31 @@ extension InnerTextView {
     
     override func mouseDragged(with event: NSEvent) {
         let index = characterIndex(for: event)!
-        let glyphIndex = layoutManager?.glyphIndexForCharacter(at: index)
+        let glyphIndex = (layoutManager?.glyphIndexForCharacter(at: index))!
         
-        (string as NSString).lineRange(for: <#T##NSRange#>)
+        //(string as NSString).lineRange(for: <#T##NSRange#>)
         
-        layoutManager?.enumerateLineFragments(forGlyphRange: <#T##NSRange#>, using: <#T##(NSRect, NSRect, NSTextContainer, NSRange, UnsafeMutablePointer<ObjCBool>) -> Void#>)
+        //layoutManager?.enumerateLineFragments(forGlyphRange: <#T##NSRange#>, using: <#T##(NSRect, NSRect, NSTextContainer, NSRange, UnsafeMutablePointer<ObjCBool>) -> Void#>)
         
-        print(layoutManager!.truncatedGlyphRange(inLineFragmentForGlyphAt: glyphIndex!))
+        // 1 find first char in line by setting X to 0
+        // 2 save rect of char (maybe)
+        // 3 if mouse moves out of rect, find 1st char of new line
+        // 4 offset first char by original offset
+        
+        
+        // if move more than 1/2 char on x, switch to box selection
+        //layoutManager!.glyphRange(forBoundingRect: <#T##NSRect#>, in: <#T##NSTextContainer#>)
+        // find smallest range
+        
+        layoutManager!.enumerateLineFragments(forGlyphRange: NSRange(location: glyphIndex, length: 100)) { (rect, usedRect, textContainer, glyphRange, stop) in
+
+            print(rect, usedRect, textContainer, glyphRange, stop)
+        }
+        
+        print("--")
+        
+        
+        //print(layoutManager!.truncatedGlyphRange(inLineFragmentForGlyphAt: glyphIndex!))
     }
     
     
