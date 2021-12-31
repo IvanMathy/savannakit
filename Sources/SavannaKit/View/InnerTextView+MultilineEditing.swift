@@ -44,6 +44,8 @@ extension InnerTextView {
         
         startIndex = characterIndex(for: event)
         insertionPoints = [1, 10, 15]
+        
+        selectedRanges = [NSRange(location: 0,length: 0), NSRange(location: 5, length: 0)] as [NSValue]
     }
     
     override func mouseDragged(with event: NSEvent) {
@@ -101,19 +103,64 @@ extension InnerTextView {
         })
     }
     
-    override func insertText(_ insertString: Any) {
-        guard let insertionPoints = insertionPoints else {
-            return super.insertText(insertString)
-        }
-        
-        insertionPoints.forEach { point in
-            self.setSelectedRange(NSRange(location: point, length: 0))
-            super.insertText(insertString)
-        }
-    }
+//    override func insertText(_ insertString: Any) {
+//        guard let insertionPoints = insertionPoints else {
+//            return super.insertText(insertString)
+//        }
+//
+//        insertionPoints.forEach { point in
+//            self.setSelectedRange(NSRange(location: point, length: 0))
+//            super.insertText(insertString)
+//        }
+//    }
     
     override func mouseUp(with event: NSEvent) {
         
         startIndex = nil
+    }
+    
+//    override func keyDown(with event: NSEvent) {
+//        guard let insertionPoints = insertionPoints else {
+//            return super.keyDown(with: event)
+//        }
+//
+//        insertionPoints.forEach { point in
+//            self.setSelectedRange(NSRange(location: point, length: 0))
+//            super.keyDown(with: event)
+//        }
+//    }
+    
+    override func insertText(_ insertString: Any) {
+
+        guard let insertionPoints = insertionPoints else {
+            return super.insertText(insertString)
+        }
+        
+        
+    }
+    
+    
+    func insert(stringInRanges pairs: [(String, NSRange)]) -> Bool {
+        
+        guard
+            shouldChangeText(inRanges: pairs.map { NSValue.init(range: $0.1) }, replacementStrings: pairs.map { $0.0 }),
+            let textStorage = self.textStorage
+        else {
+            return false
+        }
+        
+        textStorage.beginEditing()
+        
+        var offset = 0
+        
+        for pair in pairs.sorted(by: { $0.1.location < $1.1.location  }) {
+            let range = NSRange(location: pair.1.location + offset, length: pair.1.length)
+            textStorage.replaceCharacters(in: range, with: pair.0)
+            offset += pair.0.count - pair.1.length
+        }
+        
+        textStorage.endEditing()
+        
+        self.didChangeText()
     }
 }
