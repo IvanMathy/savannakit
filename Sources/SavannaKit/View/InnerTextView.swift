@@ -25,6 +25,8 @@ final class InnerTextView: NSTextView {
     
     var startIndex: Int?
     var selectionRanges: [NSRange]?
+    var cursorBlinkTimer: Timer?
+    var shouldDrawInsertionPoints = false
     
     override func menu(for event: NSEvent) -> NSMenu? {
         let menu = super.menu(for: event)

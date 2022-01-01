@@ -3,7 +3,7 @@
 //  SavannaKit macOS
 //
 //  Created by Ivan on 12/29/21.
-//  Copyright © 2021 Silver Fox. All rights reserved.
+//  Copyright © 2021 OKatBest. All rights reserved.
 //
 
 import Foundation
@@ -37,20 +37,39 @@ extension InnerTextView {
     
     override func mouseDown(with event: NSEvent) {
         guard event.modifierFlags.contains(.option) else {
-            self.setNeedsDisplay(NSRect.zero, avoidAdditionalLayout: true)
+            
+            self.cursorBlinkTimer?.invalidate()
+            self.cursorBlinkTimer = nil
+            
+            self.shouldDrawInsertionPoints = false
+            self.refreshInsertionRects()
             self.selectionRanges = nil
+            
             return super.mouseDown(with: event)
+            
+        }
+        
+        if selectionRanges != nil {
+            self.shouldDrawInsertionPoints = false
+            self.refreshInsertionRects()
         }
         
         startIndex = characterIndex(for: event)
-        selectionRanges = [NSRange(location: 0,length: 0), NSRange(location: 5, length: 0), NSRange(location: 10, length: 3)]
+        selectionRanges = []
+        
+        if let index = self.characterIndex(for: event) {
+            selectionRanges?.append(NSRange(location: index,length: 0))
+        }
+        
+        self.shouldDrawInsertionPoints = true
+        self.refreshInsertionRects()
         
     }
     
     override func mouseDragged(with event: NSEvent) {
-        let index = characterIndex(for: event)!
-        let glyphIndex = (layoutManager?.glyphIndexForCharacter(at: index))!
-        
+//        let index = characterIndex(for: event)!
+//        let glyphIndex = (layoutManager?.glyphIndexForCharacter(at: index))!
+//
         //(string as NSString).lineRange(for: <#T##NSRange#>)
         
         //layoutManager?.enumerateLineFragments(forGlyphRange: <#T##NSRange#>, using: <#T##(NSRect, NSRect, NSTextContainer, NSRange, UnsafeMutablePointer<ObjCBool>) -> Void#>)
@@ -65,21 +84,100 @@ extension InnerTextView {
         //layoutManager!.glyphRange(forBoundingRect: <#T##NSRect#>, in: <#T##NSTextContainer#>)
         // find smallest range
         
-        layoutManager!.enumerateLineFragments(forGlyphRange: NSRange(location: glyphIndex, length: 100)) { (rect, usedRect, textContainer, glyphRange, stop) in
-
-            print(rect, usedRect, textContainer, glyphRange, stop)
+//        layoutManager!.enumerateLineFragments(forGlyphRange: NSRange(location: glyphIndex, length: 100)) { (rect, usedRect, textContainer, glyphRange, stop) in
+//
+//            print(rect, usedRect, textContainer, glyphRange, stop)
+//        }
+//
+        print("--")
+        
+        self.autoscroll(with: event)
+        
+        guard
+            let index = self.characterIndex(for: event),
+            let selectionRanges = self.selectionRanges,
+            !selectionRanges.contains(where: { range in
+                range.location == index
+            })
+        else {
+            return
         }
         
-        print("--")
+        self.selectionRanges?.append(NSRange(location: index, length: 0))
+        
+        self.cursorBlinkTimer?.invalidate()
+        self.cursorBlinkTimer = nil
+        self.shouldDrawInsertionPoints = true
+        self.refreshInsertionRects()
+        self.cursorBlinkTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateInsertionPoints), userInfo: nil, repeats: true)
+        
+        
         
         
         //print(layoutManager!.truncatedGlyphRange(inLineFragmentForGlyphAt: glyphIndex!))
     }
+
     
+    @objc func updateInsertionPoints() {
+        self.refreshInsertionRects()
+        self.shouldDrawInsertionPoints.toggle()
+    }
+        
+    func refreshInsertionRects() {
+        
+        guard let selectionRanges = selectionRanges else {
+            return
+        }
+        
+        for range in selectionRanges {
+            guard range.length == 0 else {
+                continue
+            }
+            let rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: range.location, length: 1), in: textContainer!)
+            super.setNeedsDisplay(rect)
+        }
+    }
     
     override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
-        guard let selectionRanges = selectionRanges else {
-            return super.drawInsertionPoint(in: rect, color: color, turnedOn: flag)
+        guard self.selectionRanges == nil else {
+            // No thanks I make my own
+            return
+        }
+        super.drawInsertionPoint(in: rect, color: color, turnedOn: flag)
+    }
+    
+    
+//    override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
+//        guard let selectionRanges = selectionRanges else {
+//            return super.drawInsertionPoint(in: rect, color: color, turnedOn: flag)
+//        }
+//
+//        var selections = [NSRange]()
+//
+//        for range in selectionRanges {
+//            guard range.length == 0 else {
+//                selections.append(range)
+//                continue
+//            }
+//            var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: range.location, length: 1), in: textContainer!)
+//            rect = NSRect(origin: rect.origin, size: NSSize(width: 1, height: rect.height))
+//            super.drawInsertionPoint(in: rect, color: color, turnedOn: flag)
+//
+//        }
+//
+//        if !selections.isEmpty {
+//            self.setSelectionRanges(selections)
+//        }
+//
+//
+//
+//    }
+    
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+        
+        guard let selectionRanges = selectionRanges, shouldDrawInsertionPoints else {
+            return
         }
         
         var selections = [NSRange]()
@@ -91,31 +189,8 @@ extension InnerTextView {
             }
             var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: range.location, length: 1), in: textContainer!)
             rect = NSRect(origin: rect.origin, size: NSSize(width: 1, height: rect.height))
-            super.drawInsertionPoint(in: rect, color: color, turnedOn: flag)
+            super.drawInsertionPoint(in: rect, color: .textColor, turnedOn: true)
             
-        }
-        
-        if !selections.isEmpty {
-            self.setSelectionRanges(selections)
-        }
-        
-        
-        
-    }
-    
-    override func setNeedsDisplay(_ rect: NSRect, avoidAdditionalLayout flag: Bool) {
-        super.setNeedsDisplay(rect, avoidAdditionalLayout: flag)
-        
-        guard let selectionRanges = selectionRanges else {
-            return
-        }
-        
-        for range in selectionRanges {
-            guard range.length == 0 else {
-                continue
-            }
-            let rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: range.location, length: 1), in: textContainer!)
-            super.setNeedsDisplay(rect, avoidAdditionalLayout: flag)
         }
     }
     
@@ -188,4 +263,6 @@ extension InnerTextView {
         
         self.selectedRanges = ranges.filter { $0.length > 0 } as [NSValue]
     }
+    
+    
 }
