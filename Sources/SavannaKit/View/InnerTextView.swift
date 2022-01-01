@@ -24,7 +24,7 @@ final class InnerTextView: NSTextView {
     // Multiline Editing
     
     var startIndex: Int?
-    var insertionPoints: Set<Int>?
+    var selectionRanges: [NSRange]?
     
     override func menu(for event: NSEvent) -> NSMenu? {
         let menu = super.menu(for: event)

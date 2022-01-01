@@ -38,14 +38,13 @@ extension InnerTextView {
     override func mouseDown(with event: NSEvent) {
         guard event.modifierFlags.contains(.option) else {
             self.setNeedsDisplay(NSRect.zero, avoidAdditionalLayout: true)
-            insertionPoints = nil
+            self.selectionRanges = nil
             return super.mouseDown(with: event)
         }
         
         startIndex = characterIndex(for: event)
-        insertionPoints = [1, 10, 15]
+        selectionRanges = [NSRange(location: 0,length: 0), NSRange(location: 5, length: 0), NSRange(location: 10, length: 3)]
         
-        selectedRanges = [NSRange(location: 0,length: 0), NSRange(location: 5, length: 0)] as [NSValue]
     }
     
     override func mouseDragged(with event: NSEvent) {
@@ -79,17 +78,27 @@ extension InnerTextView {
     
     
     override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
-        guard let insertionPoints = insertionPoints else {
+        guard let selectionRanges = selectionRanges else {
             return super.drawInsertionPoint(in: rect, color: color, turnedOn: flag)
         }
         
-        for point in insertionPoints {
-            var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: point, length: 1), in: textContainer!)
+        var selections = [NSRange]()
+        
+        for range in selectionRanges {
+            guard range.length == 0 else {
+                selections.append(range)
+                continue
+            }
+            var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: range.location, length: 1), in: textContainer!)
             rect = NSRect(origin: rect.origin, size: NSSize(width: 1, height: rect.height))
             super.drawInsertionPoint(in: rect, color: color, turnedOn: flag)
             
-            
         }
+        
+        if !selections.isEmpty {
+            self.setSelectionRanges(selections)
+        }
+        
         
         
     }
@@ -97,10 +106,17 @@ extension InnerTextView {
     override func setNeedsDisplay(_ rect: NSRect, avoidAdditionalLayout flag: Bool) {
         super.setNeedsDisplay(rect, avoidAdditionalLayout: flag)
         
-        insertionPoints?.forEach({ point in
-            let rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: point, length: 1), in: textContainer!)
+        guard let selectionRanges = selectionRanges else {
+            return
+        }
+        
+        for range in selectionRanges {
+            guard range.length == 0 else {
+                continue
+            }
+            let rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: range.location, length: 1), in: textContainer!)
             super.setNeedsDisplay(rect, avoidAdditionalLayout: flag)
-        })
+        }
     }
     
 //    override func insertText(_ insertString: Any) {
@@ -132,10 +148,11 @@ extension InnerTextView {
     
     override func insertText(_ insertString: Any) {
 
-        guard let insertionPoints = insertionPoints else {
+        guard let insertionRanges = selectionRanges, let insertString = insertString as? String else {
             return super.insertText(insertString)
         }
         
+        self.insert(stringInRanges: insertionRanges.map { (insertString, $0)})
         
     }
     
@@ -162,5 +179,13 @@ extension InnerTextView {
         textStorage.endEditing()
         
         self.didChangeText()
+        
+        return true
+    }
+    
+    func setSelectionRanges(_ ranges: [NSRange]) {
+        self.selectionRanges = ranges
+        
+        self.selectedRanges = ranges.filter { $0.length > 0 } as [NSValue]
     }
 }
