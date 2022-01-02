@@ -9,6 +9,13 @@
 import Foundation
 import AppKit
 
+enum MoveDirection {
+    case up
+    case down
+    case left
+    case right
+}
+
 extension InnerTextView {
     
     func characterIndex(for event: NSEvent) -> Int? {
@@ -63,6 +70,8 @@ extension InnerTextView {
         
         self.shouldDrawInsertionPoints = true
         self.refreshInsertionRects()
+        
+        
         
     }
     
@@ -227,35 +236,38 @@ extension InnerTextView {
             return super.insertText(insertString)
         }
         
-        self.insert(stringInRanges: insertionRanges.map { (insertString, $0)})
+        self.selectionRanges = self.insert(stringInRanges: insertionRanges.map { (insertString, $0)})
         
     }
     
     
-    func insert(stringInRanges pairs: [(String, NSRange)]) -> Bool {
+    func insert(stringInRanges pairs: [(String, NSRange)]) -> [NSRange]? {
         
         guard
             shouldChangeText(inRanges: pairs.map { NSValue.init(range: $0.1) }, replacementStrings: pairs.map { $0.0 }),
             let textStorage = self.textStorage
         else {
-            return false
+            return nil
         }
         
         textStorage.beginEditing()
         
         var offset = 0
         
-        for pair in pairs.sorted(by: { $0.1.location < $1.1.location  }) {
+        let newPairs = pairs.sorted(by: { $0.1.location < $1.1.location  }).map {
+            pair -> NSRange in
             let range = NSRange(location: pair.1.location + offset, length: pair.1.length)
             textStorage.replaceCharacters(in: range, with: pair.0)
             offset += pair.0.count - pair.1.length
+            
+            return NSRange(location: pair.1.location + offset, length: 0)
         }
         
         textStorage.endEditing()
         
         self.didChangeText()
         
-        return true
+        return newPairs
     }
     
     func setSelectionRanges(_ ranges: [NSRange]) {
@@ -264,5 +276,93 @@ extension InnerTextView {
         self.selectedRanges = ranges.filter { $0.length > 0 } as [NSValue]
     }
     
+    func moveInsertionPoints(_ direction: MoveDirection) {
+        self.shouldDrawInsertionPoints = false
+        self.refreshInsertionRects()
+        selectionRanges = selectionRanges?.map { $0.upperBound }.compactMap {
+            self.move(index:$0, direction, by: 1)
+        }.map { NSRange(location: $0, length: 0) }
+        
+        self.shouldDrawInsertionPoints = true
+        self.refreshInsertionRects()
+    }
+    
+    // this is peak function signature fight me
+    func move(index: Int, _ direction: MoveDirection, by: Int) -> Int? {
+        guard
+            let layoutManager = layoutManager,
+            let textStorage = self.textStorage
+        else {
+            return nil
+        }
+        
+        let lineRange = self.getLineRange(for: index)
+        let characterPosition = index - lineRange.location
+        
+        
+        switch direction {
+        case .up:
+            let previousLine = lineRange.location - 1
+            guard previousLine >= 0 else {
+                // out of bounds
+                return nil
+            }
+            
+            let previousLineRange = self.getLineRange(for: previousLine)
+            
+            return previousLineRange.lowerBound + min(previousLineRange.length, characterPosition)
+            
+        case .down:
+            let nextLine = lineRange.upperBound + 1
+            guard nextLine < textStorage.length else {
+                // out of bounds
+                return nil
+            }
+            
+            let nextLineRange = self.getLineRange(for: nextLine)
+            
+            return nextLineRange.lowerBound + min(nextLineRange.length, characterPosition)
+            
+        case .left:
+            
+                return nil
+        case .right:
+            
+                return nil
+        }
+        
+        return nil
+    }
+    
+    func getLineRange(for glyphIndex: Int) -> NSRange {
+        
+        guard let layoutManager = layoutManager else {
+            fatalError("Missing Layout Manager. How did we get so far without it??")
+        }
+        
+        var lineRange:NSRange? = nil
+        layoutManager.enumerateLineFragments(forGlyphRange: NSRange(location: glyphIndex, length: 1)) { (rect, usedRect, textContainer, glyphRange, stop) in
+            print(rect, usedRect, textContainer, glyphRange, stop)
+            lineRange = glyphRange
+        }
+        print("after")
+        return lineRange ?? NSRange()
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        guard let selectionRanges = self.selectionRanges else {
+            return keyDown(with: event)
+        }
+        
+        let character = Int(event.keyCode)
+        switch character {
+        case 126:
+            self.moveInsertionPoints(.up)
+        case 127:
+            self.moveInsertionPoints(.down)
+        default:
+            super.keyUp(with: event)
+        }
+    }
     
 }
