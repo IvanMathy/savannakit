@@ -34,7 +34,7 @@ extension InnerTextView {
         var index = layoutManager.characterIndex(for: point, in: textContainer, fractionOfDistanceBetweenInsertionPoints: &fraction)
 
         if (fraction > 0.5 && index < textStorage.length &&
-            (textStorage.string as NSString).character(at: index) != 0)
+            (textStorage.string as NSString).character(at: index) != 10)
         {
           index += 1;
         }
@@ -64,7 +64,7 @@ extension InnerTextView {
         startIndex = characterIndex(for: event)
         selectionRanges = []
         
-        if let index = self.characterIndex(for: event) {
+        if let index = startIndex {
             selectionRanges?.append(NSRange(location: index,length: 0))
         }
         
@@ -98,7 +98,6 @@ extension InnerTextView {
 //            print(rect, usedRect, textContainer, glyphRange, stop)
 //        }
 //
-        print("--")
         
         self.autoscroll(with: event)
         
@@ -142,7 +141,24 @@ extension InnerTextView {
             guard range.length == 0 else {
                 continue
             }
-            let rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: range.location, length: 1), in: textContainer!)
+            // todo move to func but i need sleep
+            // also round to nearest half pixel
+            var location = range.location
+            var isLastChar = false
+            
+            if location >= textStorage!.length {
+                location -= 1
+                isLastChar = true
+            }
+            
+            var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: location, length: 1), in: textContainer!)
+            var origin = rect.origin
+            
+            if(isLastChar) {
+                origin = NSPoint(x: origin.x + rect.width, y: origin.y)
+            }
+            
+            rect = NSRect(origin: origin, size: NSSize(width: 1, height: rect.height))
             super.setNeedsDisplay(rect)
         }
     }
@@ -196,8 +212,24 @@ extension InnerTextView {
                 selections.append(range)
                 continue
             }
-            var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: range.location, length: 1), in: textContainer!)
-            rect = NSRect(origin: rect.origin, size: NSSize(width: 1, height: rect.height))
+            
+            var location = range.location
+            var isLastChar = false
+            
+            if location >= textStorage!.length {
+                location -= 1
+                isLastChar = true
+            }
+            
+            var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: location, length: 1), in: textContainer!)
+            var origin = rect.origin
+            
+            if(isLastChar) {
+                origin = NSPoint(x: origin.x + rect.width, y: origin.y)
+            }
+            
+            rect = NSRect(origin: origin, size: NSSize(width: 1, height: rect.height))
+            
             super.drawInsertionPoint(in: rect, color: .textColor, turnedOn: true)
             
         }
@@ -350,8 +382,8 @@ extension InnerTextView {
     }
     
     override func keyDown(with event: NSEvent) {
-        guard let selectionRanges = self.selectionRanges else {
-            return keyDown(with: event)
+        guard self.selectionRanges != nil else {
+            return super.keyDown(with: event)
         }
         
         let character = Int(event.keyCode)
@@ -361,7 +393,7 @@ extension InnerTextView {
         case 127:
             self.moveInsertionPoints(.down)
         default:
-            super.keyUp(with: event)
+            super.keyDown(with: event)
         }
     }
     
