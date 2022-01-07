@@ -320,6 +320,7 @@ extension InnerTextView {
     }
     
     // this is peak function signature fight me
+    // move(index, .up, by: 1)
     func move(index: Int, _ direction: MoveDirection, by: Int) -> Int? {
         guard
             let layoutManager = layoutManager,
@@ -336,8 +337,8 @@ extension InnerTextView {
         case .up:
             let previousLine = lineRange.location - 1
             guard previousLine >= 0 else {
-                // out of bounds
-                return nil
+                // out of bounds, let's return 0 like Xcode does
+                return 0
             }
             
             let previousLineRange = self.getLineRange(for: previousLine)
@@ -356,11 +357,17 @@ extension InnerTextView {
             return nextLineRange.lowerBound + min(nextLineRange.length, characterPosition)
             
         case .left:
-            
-                return nil
+            guard index - 1 >= 0 else {
+                // out of bounds, let's return 0 like Xcode does
+                return 0
+            }
+            return index - 1
         case .right:
-            
+            guard index + 1 <= textStorage.length else {
+                // out of bounds
                 return nil
+            }
+            return index + 1
         }
         
         return nil
@@ -390,8 +397,12 @@ extension InnerTextView {
         switch character {
         case 126:
             self.moveInsertionPoints(.up)
-        case 127:
+        case 125: // down
             self.moveInsertionPoints(.down)
+        case 124: // right
+            self.moveInsertionPoints(.right)
+        case 123: // left
+            self.moveInsertionPoints(.left)
         default:
             super.keyDown(with: event)
         }
