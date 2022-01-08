@@ -50,22 +50,22 @@ extension InnerTextView {
             
             self.shouldDrawInsertionPoints = false
             self.refreshInsertionRects()
-            self.selectionRanges = nil
+            self.insertionRanges = nil
             
             return super.mouseDown(with: event)
             
         }
         
-        if selectionRanges != nil {
+        if insertionRanges != nil {
             self.shouldDrawInsertionPoints = false
             self.refreshInsertionRects()
         }
         
         startIndex = characterIndex(for: event)
-        selectionRanges = []
+        insertionRanges = []
         
         if let index = startIndex {
-            selectionRanges?.append(NSRange(location: index,length: 0))
+            insertionRanges?.append(NSRange(location: index,length: 0))
         }
         
         self.shouldDrawInsertionPoints = true
@@ -103,7 +103,7 @@ extension InnerTextView {
         
         guard
             let index = self.characterIndex(for: event),
-            let selectionRanges = self.selectionRanges,
+            let selectionRanges = self.insertionRanges,
             !selectionRanges.contains(where: { range in
                 range.location == index
             })
@@ -111,7 +111,7 @@ extension InnerTextView {
             return
         }
         
-        self.selectionRanges?.append(NSRange(location: index, length: 0))
+        self.insertionRanges?.append(NSRange(location: index, length: 0))
         
         self.cursorBlinkTimer?.invalidate()
         self.cursorBlinkTimer = nil
@@ -133,7 +133,7 @@ extension InnerTextView {
         
     func refreshInsertionRects() {
         
-        guard let selectionRanges = selectionRanges else {
+        guard let selectionRanges = insertionRanges else {
             return
         }
         
@@ -164,7 +164,7 @@ extension InnerTextView {
     }
     
     override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
-        guard self.selectionRanges == nil else {
+        guard self.insertionRanges == nil else {
             // No thanks I make my own
             return
         }
@@ -201,7 +201,7 @@ extension InnerTextView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-        guard let selectionRanges = selectionRanges, shouldDrawInsertionPoints else {
+        guard let selectionRanges = insertionRanges, shouldDrawInsertionPoints else {
             return
         }
         
@@ -264,46 +264,17 @@ extension InnerTextView {
     
     override func insertText(_ insertString: Any) {
 
-        guard let insertionRanges = selectionRanges, let insertString = insertString as? String else {
+        guard let insertionRanges = insertionRanges, let insertString = insertString as? String else {
             return super.insertText(insertString)
         }
         
-        self.selectionRanges = self.insert(stringInRanges: insertionRanges.map { (insertString, $0)})
+        self.insertionRanges = self.insert(stringInRanges: insertionRanges.map { (insertString, $0)})
         
     }
     
-    
-    func insert(stringInRanges pairs: [(String, NSRange)]) -> [NSRange]? {
-        
-        guard
-            shouldChangeText(inRanges: pairs.map { NSValue.init(range: $0.1) }, replacementStrings: pairs.map { $0.0 }),
-            let textStorage = self.textStorage
-        else {
-            return nil
-        }
-        
-        textStorage.beginEditing()
-        
-        var offset = 0
-        
-        let newPairs = pairs.sorted(by: { $0.1.location < $1.1.location  }).map {
-            pair -> NSRange in
-            let range = NSRange(location: pair.1.location + offset, length: pair.1.length)
-            textStorage.replaceCharacters(in: range, with: pair.0)
-            offset += pair.0.count - pair.1.length
-            
-            return NSRange(location: pair.1.location + offset, length: 0)
-        }
-        
-        textStorage.endEditing()
-        
-        self.didChangeText()
-        
-        return newPairs
-    }
     
     func setSelectionRanges(_ ranges: [NSRange]) {
-        self.selectionRanges = ranges
+        self.insertionRanges = ranges
         
         self.selectedRanges = ranges.filter { $0.length > 0 } as [NSValue]
     }
@@ -311,7 +282,7 @@ extension InnerTextView {
     func moveInsertionPoints(_ direction: MoveDirection) {
         self.shouldDrawInsertionPoints = false
         self.refreshInsertionRects()
-        selectionRanges = selectionRanges?.map { $0.upperBound }.compactMap {
+        insertionRanges = insertionRanges?.map { $0.upperBound }.compactMap {
             self.move(index:$0, direction, by: 1)
         }.map { NSRange(location: $0, length: 0) }
         
@@ -389,7 +360,7 @@ extension InnerTextView {
     }
     
     override func keyDown(with event: NSEvent) {
-        guard self.selectionRanges != nil else {
+        guard self.insertionRanges != nil else {
             return super.keyDown(with: event)
         }
         

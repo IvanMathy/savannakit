@@ -24,7 +24,7 @@ final class InnerTextView: NSTextView {
     // Multiline Editing
     
     var startIndex: Int?
-    var selectionRanges: [NSRange]?
+    var insertionRanges: [NSRange]?
     var cursorBlinkTimer: Timer?
     var shouldDrawInsertionPoints = false
     
