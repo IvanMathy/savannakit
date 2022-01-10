@@ -106,6 +106,11 @@ extension InnerTextView {
     
     // Select
     
+    override func selectAll(_ sender: Any?) {
+        self.insertionRanges = nil
+        super.selectAll(sender)
+    }
+    
     override func selectWord(_ sender: Any?) {
         super.selectWord(sender)
         
@@ -115,6 +120,46 @@ extension InnerTextView {
     
     override func moveUpAndModifySelection(_ sender: Any?) {
         super.moveUpAndModifySelection(sender)
+    }
+    
+    override func moveLeftAndModifySelection(_ sender: Any?) {
+        guard let insertionRanges = self.insertionRanges else {
+            return super.moveLeftAndModifySelection(sender)
+        }
+        
+        self.insertionRanges = insertionRanges.map {
+            range in
+            
+            guard
+                let destination = self.move(index: range.lowerBound, .left, by: 1),
+                destination != range.lowerBound
+            else {
+                return range // can't move
+            }
+            
+            return NSRange(location: destination, length: range.length + 1)
+        }
+    }
+    
+    override func moveRightAndModifySelection(_ sender: Any?) {
+        guard let insertionRanges = self.insertionRanges else {
+            return super.moveLeftAndModifySelection(sender)
+        }
+        
+        self.insertionRanges = insertionRanges.flatMap {
+            range in
+            
+            guard
+                let destination = self.move(index: range.upperBound, .right, by: 1)
+            else {
+                if range.upperBound == self.textStorage?.length {
+                    return range // Already a full secetion, keep it
+                }
+                return nil // can't move cursor, delete like Xcode
+            }
+            
+            return NSRange(location: range.lowerBound, length: destination - range.lowerBound)
+        }
     }
     
     override func transpose(_ sender: Any?) {

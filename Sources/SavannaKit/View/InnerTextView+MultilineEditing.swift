@@ -68,9 +68,6 @@ extension InnerTextView {
             insertionRanges?.append(NSRange(location: index,length: 0))
         }
         
-        
-            insertionRanges?.append(NSRange(location: 20,length: 10))
-        
         self.shouldDrawInsertionPoints = true
         self.refreshInsertionRects()
         
