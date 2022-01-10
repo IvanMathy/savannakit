@@ -118,10 +118,6 @@ extension InnerTextView {
         
     }
     
-    override func moveUpAndModifySelection(_ sender: Any?) {
-        super.moveUpAndModifySelection(sender)
-    }
-    
     override func moveLeftAndModifySelection(_ sender: Any?) {
         guard let insertionRanges = self.insertionRanges else {
             return super.moveLeftAndModifySelection(sender)
@@ -131,7 +127,7 @@ extension InnerTextView {
             range in
             
             guard
-                let destination = self.move(index: range.lowerBound, .left, by: 1),
+                let destination = self.move(range.lowerBound, .left, by: 1),
                 destination != range.lowerBound
             else {
                 return range // can't move
@@ -150,7 +146,7 @@ extension InnerTextView {
             range in
             
             guard
-                let destination = self.move(index: range.upperBound, .right, by: 1)
+                let destination = self.move(range.upperBound, .right, by: 1)
             else {
                 if range.upperBound == self.textStorage?.length {
                     return range // Already a full selection, keep it
@@ -160,6 +156,36 @@ extension InnerTextView {
             
             return NSRange(location: range.lowerBound, length: destination - range.lowerBound)
         }
+    }
+    
+    override func moveDownAndModifySelection(_ sender: Any?) {
+        if
+            let insertionRanges = self.insertionRanges?.sorted(
+                by: { $0.lowerBound < $1.lowerBound }),
+            let first = insertionRanges.first?.lowerBound,
+            let last = insertionRanges.last?.upperBound
+        {
+            self.selectedRanges = [NSRange(location: first, length: last - first) as NSValue]
+        }
+        
+        self.insertionRanges = nil
+        
+        super.moveDownAndModifySelection(sender)
+    }
+    
+    override func moveUpAndModifySelection(_ sender: Any?) {
+        if
+            let insertionRanges = self.insertionRanges?.sorted(
+                by: { $0.lowerBound < $1.lowerBound }),
+            let first = insertionRanges.first?.lowerBound,
+            let last = insertionRanges.last?.upperBound
+        {
+            self.selectedRanges = [NSRange(location: first, length: last - first) as NSValue]
+        }
+        
+        self.insertionRanges = nil
+        
+        super.moveUpAndModifySelection(sender)
     }
     
     override func transpose(_ sender: Any?) {

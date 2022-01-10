@@ -45,14 +45,18 @@ extension InnerTextView {
     override func mouseDown(with event: NSEvent) {
         guard event.modifierFlags.contains(.option) else {
             
-            self.cursorBlinkTimer?.invalidate()
-            self.cursorBlinkTimer = nil
-            
-            self.shouldDrawInsertionPoints = false
-            self.refreshInsertionRects()
-            self.insertionRanges = nil
+            if insertionRanges != nil {
+                self.cursorBlinkTimer?.invalidate()
+                self.cursorBlinkTimer = nil
+                
+                self.shouldDrawInsertionPoints = false
+                self.refreshInsertionRects()
+                self.insertionRanges = nil
+            }
             
             return super.mouseDown(with: event)
+            
+            // Check and sync new ranges here
             
         }
         
@@ -63,6 +67,7 @@ extension InnerTextView {
         
         startIndex = characterIndex(for: event)
         insertionRanges = []
+        self.setSelectedRange(NSRange())
         
         if let index = startIndex {
             insertionRanges?.append(NSRange(location: index,length: 0))
@@ -289,7 +294,7 @@ extension InnerTextView {
                 // If we have a selection, stay at the bounds when moving left/right
                 return position
             }
-            return self.move(index: position, direction, by: 1)
+            return self.move(position, direction, by: 1)
         }.map { NSRange(location: $0, length: 0) }
         
         self.shouldDrawInsertionPoints = true
@@ -298,7 +303,7 @@ extension InnerTextView {
     
     // this is peak function signature fight me
     // move(index, .up, by: 1)
-    func move(index: Int, _ direction: MoveDirection, by: Int) -> Int? {
+    func move(_ index: Int, _ direction: MoveDirection, by: Int) -> Int? {
         guard
             let layoutManager = layoutManager,
             let textStorage = self.textStorage
