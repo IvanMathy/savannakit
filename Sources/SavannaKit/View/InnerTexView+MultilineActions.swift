@@ -68,10 +68,56 @@ extension InnerTextView {
             return ("", NSRange(location: range.location - 1, length: 1))
         }))
     }
+    // Move
+    
+    override func moveUp(_ sender: Any?) {
+        guard (self.insertionRanges != nil) else {
+            return super.moveUp(sender)
+        }
+        self.moveInsertionPoints(.up)
+    }
+    
+    override func moveDown(_ sender: Any?) {
+        guard (self.insertionRanges != nil) else {
+            return super.moveDown(sender)
+        }
+        self.moveInsertionPoints(.down)
+    }
+    
+    override func moveLeft(_ sender: Any?) {
+        guard (self.insertionRanges != nil) else {
+            return super.moveLeft(sender)
+        }
+        self.moveInsertionPoints(.left)
+    }
+    override func moveRight(_ sender: Any?) {
+        guard (self.insertionRanges != nil) else {
+            return super.moveRight(sender)
+        }
+        self.moveInsertionPoints(.right)
+    }
+    
+    override func moveForward(_ sender: Any?) {
+        super.moveForward(sender)
+        
+        
+        // Todo: handle both writing directions? not sure when this function is used.
+    }
     
     // Select
     
     override func selectWord(_ sender: Any?) {
         super.selectWord(sender)
+        
+        // https://developer.apple.com/documentation/appkit/nstextview/1449188-selectionrange
+        
+    }
+    
+    override func moveUpAndModifySelection(_ sender: Any?) {
+        super.moveUpAndModifySelection(sender)
+    }
+    
+    override func transpose(_ sender: Any?) {
+        super.transpose(sender) // ctrl + t
     }
 }

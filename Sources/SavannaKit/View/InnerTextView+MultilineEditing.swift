@@ -68,6 +68,9 @@ extension InnerTextView {
             insertionRanges?.append(NSRange(location: index,length: 0))
         }
         
+        
+            insertionRanges?.append(NSRange(location: 20,length: 10))
+        
         self.shouldDrawInsertionPoints = true
         self.refreshInsertionRects()
         
@@ -359,24 +362,17 @@ extension InnerTextView {
         return lineRange ?? NSRange()
     }
     
-    override func keyDown(with event: NSEvent) {
-        guard self.insertionRanges != nil else {
-            return super.keyDown(with: event)
+    func didSetInsertionRanges() {
+        guard let selection = (self.insertionRanges?.filter({
+            $0.length > 0
+        }) as [NSValue]?) else {
+            return
         }
+        guard selection.count > 0 else {
+            return
+        }
+        self.selectedRanges = selection
         
-        let character = Int(event.keyCode)
-        switch character {
-        case 126:
-            self.moveInsertionPoints(.up)
-        case 125: // down
-            self.moveInsertionPoints(.down)
-        case 124: // right
-            self.moveInsertionPoints(.right)
-        case 123: // left
-            self.moveInsertionPoints(.left)
-        default:
-            super.keyDown(with: event)
-        }
     }
     
 }
