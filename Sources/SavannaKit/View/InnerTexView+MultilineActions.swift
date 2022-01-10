@@ -153,7 +153,7 @@ extension InnerTextView {
                 let destination = self.move(index: range.upperBound, .right, by: 1)
             else {
                 if range.upperBound == self.textStorage?.length {
-                    return range // Already a full secetion, keep it
+                    return range // Already a full selection, keep it
                 }
                 return nil // can't move cursor, delete like Xcode
             }

@@ -280,10 +280,16 @@ extension InnerTextView {
     }
     
     func moveInsertionPoints(_ direction: MoveDirection) {
+        self.setSelectedRange(NSRange())
         self.shouldDrawInsertionPoints = false
         self.refreshInsertionRects()
-        insertionRanges = insertionRanges?.map { $0.upperBound }.compactMap {
-            self.move(index:$0, direction, by: 1)
+        insertionRanges = insertionRanges?.compactMap {
+            let position = (direction == .right) ? $0.upperBound : $0.lowerBound
+            if $0.length > 0, [.left, .right].contains(direction) {
+                // If we have a selection, stay at the bounds when moving left/right
+                return position
+            }
+            return self.move(index: position, direction, by: 1)
         }.map { NSRange(location: $0, length: 0) }
         
         self.shouldDrawInsertionPoints = true
@@ -352,10 +358,8 @@ extension InnerTextView {
         
         var lineRange:NSRange? = nil
         layoutManager.enumerateLineFragments(forGlyphRange: NSRange(location: glyphIndex, length: 1)) { (rect, usedRect, textContainer, glyphRange, stop) in
-            print(rect, usedRect, textContainer, glyphRange, stop)
             lineRange = glyphRange
         }
-        print("after")
         return lineRange ?? NSRange()
     }
     
@@ -363,6 +367,7 @@ extension InnerTextView {
         guard let selection = (self.insertionRanges?.filter({
             $0.length > 0
         }) as [NSValue]?) else {
+        
             return
         }
         guard selection.count > 0 else {
