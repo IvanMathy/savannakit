@@ -20,6 +20,13 @@ extension InnerTextView {
     
     func characterIndex(for event: NSEvent) -> Int? {
         
+        let point = self.convert(event.locationInWindow, from: nil)
+        
+        return self.characterIndex(at: point)
+    }
+    
+    func characterIndex(at point: CGPoint) -> Int? {
+        
         guard
             let layoutManager = layoutManager,
             let textStorage   = textStorage,
@@ -28,7 +35,6 @@ extension InnerTextView {
             return nil
         }
         
-        let point = self.convert(event.locationInWindow, from: nil)
         var fraction: CGFloat = 0
 
         var index = layoutManager.characterIndex(for: point, in: textContainer, fractionOfDistanceBetweenInsertionPoints: &fraction)
@@ -65,13 +71,12 @@ extension InnerTextView {
             self.refreshInsertionRects()
         }
         
-        startIndex = characterIndex(for: event)
+        startPoint = self.convert(event.locationInWindow, from: nil)
+        
         insertionRanges = []
         self.setSelectedRange(NSRange())
         
-        if let index = startIndex {
-            insertionRanges?.append(NSRange(location: index,length: 0))
-        }
+        
         
         self.shouldDrawInsertionPoints = true
         self.refreshInsertionRects()
@@ -134,6 +139,28 @@ extension InnerTextView {
     @objc func updateInsertionPoints() {
         self.refreshInsertionRects()
         self.shouldDrawInsertionPoints.toggle()
+    }
+    
+    func updateinsertionRanges(with currentPoint: CGPoint?) {
+        guard let startPoint = startPoint else {
+            return
+        }
+        
+        guard let currentPoint = currentPoint else {
+            if let index = self.characterIndex(at: startPoint) {
+                self.insertionRanges = [NSRange(location: index, length: 0)]
+            }
+            return
+        }
+        
+        guard let startIndex = self.characterIndex(at: startPoint) else {
+            return
+        }
+            
+        
+        self.getLineRange(for: startIndex)
+        
+        >>self.layoutManager.rect
     }
         
     func refreshInsertionRects() {
