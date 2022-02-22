@@ -109,6 +109,7 @@ extension InnerTextView {
 //        }
 //
         
+        
         self.autoscroll(with: event)
         
         guard
@@ -121,7 +122,12 @@ extension InnerTextView {
             return
         }
         
-        self.insertionRanges?.append(NSRange(location: index, length: 0))
+        
+        self.updateinsertionRanges(with: self.convert(event.locationInWindow, from: nil))
+        
+        print(self.insertionRanges)
+        
+        //self.insertionRanges?.append(NSRange(location: index, length: 0))
         
         self.cursorBlinkTimer?.invalidate()
         self.cursorBlinkTimer = nil
@@ -156,11 +162,52 @@ extension InnerTextView {
         guard let startIndex = self.characterIndex(at: startPoint) else {
             return
         }
+        
+        guard let currentIndex = self.characterIndex(at: currentPoint) else {
+            return
+        }
+        
+        let min = min(currentIndex, startIndex)
+        let max = max(currentIndex, startIndex)
             
+        var cursor = min
+        var range = self.getLineRange(for: cursor)
         
-        self.getLineRange(for: startIndex)
+        let positionInLine = startIndex - range.lowerBound
+        var ranges = [range]
+        print("----")
         
-        >>self.layoutManager.rect
+        while !range.contains(max) && range.upperBound != self.textStorage?.length  {
+            print(range, cursor, max)
+            cursor = range.upperBound + 1
+            range = self.getLineRange(for: cursor)
+            ranges.append(range)
+        }
+        let startRange = self.getLineRange(for: startIndex)
+        
+        let firstLinePoint = CGPoint(x: currentPoint.x, y: startPoint.y)
+        
+        guard let offsetIndex = self.characterIndex(at: firstLinePoint) else {
+            return
+        }
+        
+        let delta = offsetIndex - startIndex
+        
+        self.insertionRanges = ranges.compactMap({ range in
+            var upper = range.upperBound
+            
+            if range.upperBound != self.textStorage?.length {
+                upper -= 1
+            }
+            let start = Swift.min(range.lowerBound + positionInLine, upper)
+            let end = Swift.min(start + delta, upper)
+            let min = Swift.min(start, end)
+            return NSRange(location: Swift.min(start, end), length: abs(start - end))
+        })
+         //   self.insertionRanges?.append(NSRange(location: index, length: 0))
+       
+        
+        //self.layoutManager.rect
     }
         
     func refreshInsertionRects() {
@@ -237,11 +284,9 @@ extension InnerTextView {
             return
         }
         
-        var selections = [NSRange]()
-        
         for range in selectionRanges {
+            // We're not paid enough to draw multicursor selections ourselves.
             guard range.length == 0 else {
-                selections.append(range)
                 continue
             }
             
@@ -403,7 +448,7 @@ extension InnerTextView {
             return
         }
         guard selection.count > 0 else {
-            return
+            return self.selectedRanges = [NSValue()]
         }
         self.selectedRanges = selection
         
