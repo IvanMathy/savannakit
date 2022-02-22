@@ -231,19 +231,18 @@ extension InnerTextView {
         
         //self.layoutManager.rect
     }
-        
-    func refreshInsertionRects() {
-        
+    
+    func getCursorRects() -> [NSRect] {
         guard let selectionRanges = insertionRanges else {
-            return
+            return []
         }
         
-        for range in selectionRanges {
+        return selectionRanges.compactMap({ range in
             guard range.length == 0 else {
-                continue
+                return nil
             }
-            // todo move to func but i need sleep
-            // also round to nearest half pixel
+            
+            // use previous character rect for cursor position
             var location = range.location
             var isLastChar = false
             
@@ -259,8 +258,19 @@ extension InnerTextView {
                 origin = NSPoint(x: origin.x + rect.width, y: origin.y)
             }
             
-            rect = NSRect(origin: origin, size: NSSize(width: 1, height: rect.height))
-            super.setNeedsDisplay(rect)
+            // Round for a crisp line. I'm getting flashback to when I
+            // thought saying I cared about "Pixel perfection" was cool.
+            // I mean caring is cool, but saying it is very much  not.
+            origin = NSPoint(x: round(origin.x) - 1, y: origin.y)
+            
+            
+            return NSRect(origin: origin, size: NSSize(width: 1, height: rect.height))
+        })
+    }
+        
+    func refreshInsertionRects() {
+        getCursorRects().forEach {
+            super.setNeedsDisplay($0)
         }
     }
     
@@ -302,35 +312,12 @@ extension InnerTextView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-        guard let selectionRanges = insertionRanges, shouldDrawInsertionPoints else {
+        guard shouldDrawInsertionPoints else {
             return
         }
         
-        for range in selectionRanges {
-            // We're not paid enough to draw multicursor selections ourselves.
-            guard range.length == 0 else {
-                continue
-            }
-            
-            var location = range.location
-            var isLastChar = false
-            
-            if location >= textStorage!.length {
-                location -= 1
-                isLastChar = true
-            }
-            
-            var rect = getCharacterRect(at: location)
-            var origin = rect.origin
-            
-            if(isLastChar) {
-                origin = NSPoint(x: origin.x + rect.width, y: origin.y)
-            }
-            
-            rect = NSRect(origin: origin, size: NSSize(width: 1, height: rect.height))
-            
-            super.drawInsertionPoint(in: rect, color: .textColor, turnedOn: true)
-            
+        getCursorRects().forEach {
+            super.drawInsertionPoint(in: $0, color: .textColor, turnedOn: true)
         }
     }
     
