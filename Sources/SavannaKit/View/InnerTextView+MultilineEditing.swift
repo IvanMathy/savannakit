@@ -175,10 +175,8 @@ extension InnerTextView {
         
         let positionInLine = startIndex - range.lowerBound
         var ranges = [range]
-        print("----")
         
         while !range.contains(max) && range.upperBound != self.textStorage?.length  {
-            print(range, cursor, max)
             cursor = range.upperBound + 1
             range = self.getLineRange(for: cursor)
             ranges.append(range)
@@ -377,7 +375,6 @@ extension InnerTextView {
     // move(index, .up, by: 1)
     func move(_ index: Int, _ direction: MoveDirection, by: Int) -> Int? {
         guard
-            let layoutManager = layoutManager,
             let textStorage = self.textStorage
         else {
             return nil
@@ -423,21 +420,27 @@ extension InnerTextView {
             }
             return index + 1
         }
-        
-        return nil
     }
     
     func getLineRange(for glyphIndex: Int) -> NSRange {
+        return self.getLineInfo(for: glyphIndex).0
+    }
+    
+    func getLineInfo(for glyphIndex: Int) -> (NSRange, NSRect) {
         
         guard let layoutManager = layoutManager else {
             fatalError("Missing Layout Manager. How did we get so far without it??")
         }
         
-        var lineRange:NSRange? = nil
+        var lineRange = NSRange()
+        var lineRect = NSRect.zero
+        
         layoutManager.enumerateLineFragments(forGlyphRange: NSRange(location: glyphIndex, length: 1)) { (rect, usedRect, textContainer, glyphRange, stop) in
             lineRange = glyphRange
+            lineRect = rect
         }
-        return lineRange ?? NSRange()
+        
+        return (lineRange, lineRect)
     }
     
     func didSetInsertionRanges() {
