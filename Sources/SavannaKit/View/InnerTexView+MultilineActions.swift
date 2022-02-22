@@ -65,6 +65,9 @@ extension InnerTextView {
             guard range.location > 0 else {
                 return nil
             }
+            guard range.length == 0 else {
+                return ("", range)
+            }
             return ("", NSRange(location: range.location - 1, length: 1))
         }))
     }

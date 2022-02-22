@@ -112,20 +112,10 @@ extension InnerTextView {
         
         self.autoscroll(with: event)
         
-        guard
-            let index = self.characterIndex(for: event),
-            let selectionRanges = self.insertionRanges,
-            !selectionRanges.contains(where: { range in
-                range.location == index
-            })
-        else {
-            return
-        }
         
         
         self.updateinsertionRanges(with: self.convert(event.locationInWindow, from: nil))
         
-        print(self.insertionRanges)
         
         //self.insertionRanges?.append(NSRange(location: index, length: 0))
         
@@ -167,39 +157,73 @@ extension InnerTextView {
             return
         }
         
+        // Here we pretend the selection started perfectly in the right spot
+        let normalizedStartPoint = self.getCharacterRect(at: startIndex).origin
+        
+        
         let min = min(currentIndex, startIndex)
         let max = max(currentIndex, startIndex)
             
         var cursor = min
-        var range = self.getLineRange(for: cursor)
+        let info = self.getLineInfo(for: cursor)
+        var range = info.0
         
         let positionInLine = startIndex - range.lowerBound
-        var ranges = [range]
+        var infos = [info]
         
-        while !range.contains(max) && range.upperBound != self.textStorage?.length  {
+        while
+            !range.contains(max),
+            range.upperBound != self.textStorage?.length
+        {
             cursor = range.upperBound + 1
-            range = self.getLineRange(for: cursor)
-            ranges.append(range)
+            let info = self.getLineInfo(for: cursor)
+            range = info.0
+            infos.append(info)
         }
+        
         let startRange = self.getLineRange(for: startIndex)
         
-        let firstLinePoint = CGPoint(x: currentPoint.x, y: startPoint.y)
+        let firstLinePoint = CGPoint(x: currentPoint.x + normalizedStartPoint.x - startPoint.x, y: startPoint.y)
         
         guard let offsetIndex = self.characterIndex(at: firstLinePoint) else {
             return
         }
         
+        //todo: handle last charcter in line
+        
         let delta = offsetIndex - startIndex
         
-        self.insertionRanges = ranges.compactMap({ range in
+      
+        
+        self.insertionRanges = infos.compactMap({ info in
+            
+            let range = info.0
             var upper = range.upperBound
             
             if range.upperBound != self.textStorage?.length {
                 upper -= 1
             }
-            let start = Swift.min(range.lowerBound + positionInLine, upper)
-            let end = Swift.min(start + delta, upper)
-            let min = Swift.min(start, end)
+            let startIndex = Swift.min(range.lowerBound + positionInLine, upper)
+            
+            guard delta != 0 else {
+                // No need for a range
+                return NSRange(location: startIndex, length: 0)
+            }
+            
+            // Box search
+            
+            let y = info.1.origin.y + info.1.height / 2
+            
+            guard
+                let start = characterIndex(at: CGPoint(x: normalizedStartPoint.x, y: y)),
+                let end = characterIndex(at: CGPoint(x: firstLinePoint.x, y: y)),
+                start != end // end of line
+            else  {
+                return nil
+            }
+            
+            print(start, end, info)
+            
             return NSRange(location: Swift.min(start, end), length: abs(start - end))
         })
          //   self.insertionRanges?.append(NSRange(location: index, length: 0))
@@ -228,7 +252,7 @@ extension InnerTextView {
                 isLastChar = true
             }
             
-            var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: location, length: 1), in: textContainer!)
+            var rect = getCharacterRect(at: location)
             var origin = rect.origin
             
             if(isLastChar) {
@@ -296,7 +320,7 @@ extension InnerTextView {
                 isLastChar = true
             }
             
-            var rect = layoutManager!.boundingRect(forGlyphRange: NSRange(location: location, length: 1), in: textContainer!)
+            var rect = getCharacterRect(at: location)
             var origin = rect.origin
             
             if(isLastChar) {
@@ -420,6 +444,10 @@ extension InnerTextView {
             }
             return index + 1
         }
+    }
+    
+    func getCharacterRect(at location: Int) -> CGRect {
+        return layoutManager!.boundingRect(forGlyphRange: NSRange(location: location, length: 1), in: textContainer!)
     }
     
     func getLineRange(for glyphIndex: Int) -> NSRange {
