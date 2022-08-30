@@ -114,12 +114,6 @@ extension InnerTextView {
         super.selectAll(sender)
     }
     
-    override func selectWord(_ sender: Any?) {
-        super.selectWord(sender)
-        
-        // https://developer.apple.com/documentation/appkit/nstextview/1449188-selectionrange
-        
-    }
     
     override func moveLeftAndModifySelection(_ sender: Any?) {
         guard let insertionRanges = self.insertionRanges else {
@@ -189,9 +183,5 @@ extension InnerTextView {
         self.insertionRanges = nil
         
         super.moveUpAndModifySelection(sender)
-    }
-    
-    override func transpose(_ sender: Any?) {
-        super.transpose(sender) // ctrl + t
     }
 }
