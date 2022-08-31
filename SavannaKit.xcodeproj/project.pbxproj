@@ -21,12 +21,13 @@
 		2C7B49FD2285085C00030962 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B49FC2285085C00030962 /* ViewController.swift */; };
 		2C7B49FE22850B8300030962 /* SavannaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE15626E1EFE9E7C00EB3723 /* SavannaKit.framework */; };
 		2C9276C624C68D3500576B1F /* NewBoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7A093724C68C0800596D31 /* NewBoopLexer.swift */; };
-		2C9276CA24C7B84100576B1F /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9276C924C7B84100576B1F /* PerformanceTests.swift */; };
+		2C9276CA24C7B84100576B1F /* MultiCursorEditingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9276C924C7B84100576B1F /* MultiCursorEditingTests.swift */; };
 		2CCBCFE8278909C500F9D766 /* InnerTexView+MultilineActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCBCFE7278909C500F9D766 /* InnerTexView+MultilineActions.swift */; };
 		2CD2D70024C3886E0091DD26 /* BoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD2D6FF24C3886D0091DD26 /* BoopLexer.swift */; };
 		2CD2D70824C388910091DD26 /* AliceInWonderland.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2CD2D70624C388910091DD26 /* AliceInWonderland.txt */; };
 		2CD2D70924C388910091DD26 /* BoopGithub.html in Resources */ = {isa = PBXBuildFile; fileRef = 2CD2D70724C388910091DD26 /* BoopGithub.html */; };
 		59D9126428B43D9500FC75FE /* InnerTextView+MultilineKeyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D9126328B43D9500FC75FE /* InnerTextView+MultilineKeyBinding.swift */; };
+		59D9126628BED3C800FC75FE /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D9126528BED3C800FC75FE /* PerformanceTests.swift */; };
 		BE21904C20533BEB00BFB99A /* SyntaxTextViewLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE21904A2053318600BFB99A /* SyntaxTextViewLayoutManager.swift */; };
 		BE4280392038C38E00C8FE24 /* SyntaxTextView+TextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4280372038C38900C8FE24 /* SyntaxTextView+TextViewDelegate.swift */; };
 		BE42803F2038C4DB00C8FE24 /* Paragraphs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE42803A2038C3AA00C8FE24 /* Paragraphs.swift */; };
@@ -70,12 +71,13 @@
 		2C7B49F62285072600030962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C7B49F72285072600030962 /* macOS_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS_Example.entitlements; sourceTree = "<group>"; };
 		2C7B49FC2285085C00030962 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		2C9276C924C7B84100576B1F /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PerformanceTests.swift; path = Sources/SavannaKitTests/PerformanceTests.swift; sourceTree = SOURCE_ROOT; };
+		2C9276C924C7B84100576B1F /* MultiCursorEditingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MultiCursorEditingTests.swift; path = Sources/SavannaKitTests/MultiCursorEditingTests.swift; sourceTree = SOURCE_ROOT; };
 		2CCBCFE7278909C500F9D766 /* InnerTexView+MultilineActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InnerTexView+MultilineActions.swift"; sourceTree = "<group>"; };
 		2CD2D6FF24C3886D0091DD26 /* BoopLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoopLexer.swift; sourceTree = "<group>"; };
 		2CD2D70624C388910091DD26 /* AliceInWonderland.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AliceInWonderland.txt; sourceTree = "<group>"; };
 		2CD2D70724C388910091DD26 /* BoopGithub.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = BoopGithub.html; sourceTree = "<group>"; };
 		59D9126328B43D9500FC75FE /* InnerTextView+MultilineKeyBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InnerTextView+MultilineKeyBinding.swift"; sourceTree = "<group>"; };
+		59D9126528BED3C800FC75FE /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 		BE15626E1EFE9E7C00EB3723 /* SavannaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SavannaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE21904A2053318600BFB99A /* SyntaxTextViewLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxTextViewLayoutManager.swift; sourceTree = "<group>"; };
 		BE4280372038C38900C8FE24 /* SyntaxTextView+TextViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyntaxTextView+TextViewDelegate.swift"; sourceTree = "<group>"; };
@@ -262,7 +264,8 @@
 				2CD2D70524C388910091DD26 /* TestCases */,
 				2CD2D6FE24C3886D0091DD26 /* Support */,
 				BEE6D389209A312400E881D9 /* SavannaKitTests.swift */,
-				2C9276C924C7B84100576B1F /* PerformanceTests.swift */,
+				2C9276C924C7B84100576B1F /* MultiCursorEditingTests.swift */,
+				59D9126528BED3C800FC75FE /* PerformanceTests.swift */,
 				BEE6D38B209A312400E881D9 /* Info.plist */,
 			);
 			path = SavannaKitTests;
@@ -456,8 +459,9 @@
 			files = (
 				2C157AFA24C3891500D5BDD0 /* BoopToken.swift in Sources */,
 				2CD2D70024C3886E0091DD26 /* BoopLexer.swift in Sources */,
+				59D9126628BED3C800FC75FE /* PerformanceTests.swift in Sources */,
 				BEE6D38A209A312400E881D9 /* SavannaKitTests.swift in Sources */,
-				2C9276CA24C7B84100576B1F /* PerformanceTests.swift in Sources */,
+				2C9276CA24C7B84100576B1F /* MultiCursorEditingTests.swift in Sources */,
 				2C7A093924C68C0800596D31 /* NewBoopLexer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

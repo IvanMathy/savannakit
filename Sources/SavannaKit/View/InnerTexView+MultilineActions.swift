@@ -52,8 +52,16 @@ extension InnerTextView {
         guard let insertionRanges = self.insertionRanges else {
             return super.deleteForward(sender)
         }
-        self.moveInsertionPoints(.right)
-        self.deleteBackward(sender)
+        
+        self.insertionRanges = self.insert(stringInRanges: insertionRanges.compactMap({ range in
+            guard range.location < self.text.count else {
+                return nil
+            }
+            guard range.length == 0 else {
+                return ("", range)
+            }
+            return ("", NSRange(location: range.location, length: 1))
+        }))
     }
     
     override func deleteBackward(_ sender: Any?) {
