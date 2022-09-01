@@ -22,21 +22,56 @@ extension InnerTextView {
 //    }
     
     override func moveToBeginningOfLine(_ sender: Any?) {
+        guard let insertionRanges = self.insertionRanges else {
+            return super.moveToBeginningOfLine(sender)
+        }
+        
+        self.insertionRanges = insertionRanges.map {
+            range in
+            
+            let newRange = self.getLineRange(for: range.lowerBound)
+            
+            return NSRange(location: newRange.lowerBound, length: 0)
+        }
+        self.shouldDrawInsertionPoints = true
+        self.refreshInsertionRects()
     }
     
     override func moveToEndOfLine(_ sender: Any?) {
+        guard let insertionRanges = self.insertionRanges else {
+            return super.moveToBeginningOfLine(sender)
+        }
+        
+        self.insertionRanges = insertionRanges.map {
+            range in
+            
+            let newRange = self.getLineRange(for: range.upperBound)
+            
+            let index = self.text.index(self.text.startIndex, offsetBy: newRange.upperBound - 1)
+            
+            let newLineOffset = (self.text[index].isNewline) ? 1 : 0
+            
+            return NSRange(location: newRange.upperBound - newLineOffset, length: 0)
+        }
+        
+        self.shouldDrawInsertionPoints = true
+        self.refreshInsertionRects()
     }
     
     override func moveToBeginningOfParagraph(_ sender: Any?) {
+        print("moveToBeginningOfParagraph")
     }
     
     override func moveToEndOfParagraph(_ sender: Any?) {
+        print("moveToEndOfParagraph")
     }
     
     override func moveToEndOfDocument(_ sender: Any?) {
+        print("moveToEndOfDocument")
     }
     
     override func moveToBeginningOfDocument(_ sender: Any?) {
+        print("moveToBeginningOfDocument")
     }
     
     override func pageDown(_ sender: Any?) {
@@ -104,13 +139,16 @@ extension InnerTextView {
     override func moveWordLeftAndModifySelection(_ sender: Any?) {
     }
 
-    @available(macOS 10.6, *)
-    override func moveToLeftEndOfLine(_ sender: Any?) {
-    }
-
-    @available(macOS 10.6, *)
-    override func moveToRightEndOfLine(_ sender: Any?) {
-    }
+    // these call moveToBeginningOfLine and such
+//    @available(macOS 10.6, *)
+//    override func moveToLeftEndOfLine(_ sender: Any?) {
+//        print("moveToLeftEndOfLine")
+//    }
+//
+//    @available(macOS 10.6, *)
+//    override func moveToRightEndOfLine(_ sender: Any?) {
+//        print("moveToRightEndOfLine")
+//    }
 
     @available(macOS 10.6, *)
     override func moveToLeftEndOfLineAndModifySelection(_ sender: Any?) {
@@ -160,8 +198,8 @@ extension InnerTextView {
     override func indent(_ sender: Any?) {
     }
 
-    override func insertNewline(_ sender: Any?) {
-    }
+//    override func insertNewline(_ sender: Any?) {
+//    }
 
     override func insertParagraphSeparator(_ sender: Any?) {
     }
