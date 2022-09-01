@@ -9,6 +9,22 @@ import Foundation
 
 extension InnerTextView {
     
+    func replaceRanges(with replacementClosure: (NSRange) -> NSRange) -> Bool {
+        guard let insertionRanges = self.insertionRanges else {
+            return false
+        }
+        
+        
+        self.shouldDrawInsertionPoints = false
+        self.refreshInsertionRects()
+        
+        self.insertionRanges = insertionRanges.map(replacementClosure)
+        self.shouldDrawInsertionPoints = true
+        self.refreshInsertionRects()
+        
+        return true;
+    }
+    
     
     override func moveBackward(_ sender: Any?) {
     }
@@ -71,27 +87,29 @@ extension InnerTextView {
     }
     
     override func moveToEndOfDocument(_ sender: Any?) {
-        print("moveToEndOfDocument")
+        self.insertionRanges = nil;
+        super.moveToEndOfDocument(sender)
     }
     
     override func moveToBeginningOfDocument(_ sender: Any?) {
-        print("moveToBeginningOfDocument")
+        self.insertionRanges = nil;
+        super.moveToBeginningOfDocument(sender)
     }
     
-    override func pageDown(_ sender: Any?) {
-    }
+//    override func pageDown(_ sender: Any?) {
+//    }
+//
+//    override func pageUp(_ sender: Any?) {
+//    }
     
-    override func pageUp(_ sender: Any?) {
-    }
+//    override func centerSelectionInVisibleArea(_ sender: Any?) {
+//    }
     
-    override func centerSelectionInVisibleArea(_ sender: Any?) {
-    }
-    
-    override func moveBackwardAndModifySelection(_ sender: Any?) {
-    }
-    
-    override func moveForwardAndModifySelection(_ sender: Any?) {
-    }
+//    override func moveBackwardAndModifySelection(_ sender: Any?) {
+//    }
+//
+//    override func moveForwardAndModifySelection(_ sender: Any?) {
+//    }
     
     override func moveWordForwardAndModifySelection(_ sender: Any?) {
     }
@@ -101,9 +119,21 @@ extension InnerTextView {
 
 
     override func moveToBeginningOfLineAndModifySelection(_ sender: Any?) {
+        guard replaceRanges(with: { range in
+            let newRange = self.getLineRange(for: range.lowerBound)
+            return NSRange(location: newRange.lowerBound, length: range.upperBound - newRange.lowerBound)
+        }) else {
+            return super.moveToBeginningOfLineAndModifySelection(sender)
+        }
     }
 
     override func moveToEndOfLineAndModifySelection(_ sender: Any?) {
+        guard replaceRanges(with: { range in
+            let newRange = self.getLineRange(for: range.upperBound)
+            return NSRange(location: range.lowerBound, length: newRange.upperBound - range.lowerBound)
+        }) else {
+            return super.moveToEndOfLineAndModifySelection(sender)
+        }
     }
 
     override func moveToBeginningOfParagraphAndModifySelection(_ sender: Any?) {
@@ -154,13 +184,13 @@ extension InnerTextView {
 //        print("moveToRightEndOfLine")
 //    }
 
-    @available(macOS 10.6, *)
-    override func moveToLeftEndOfLineAndModifySelection(_ sender: Any?) {
-    }
-
-    @available(macOS 10.6, *)
-    override func moveToRightEndOfLineAndModifySelection(_ sender: Any?) {
-    }
+//    @available(macOS 10.6, *)
+//    override func moveToLeftEndOfLineAndModifySelection(_ sender: Any?) {
+//    }
+//
+//    @available(macOS 10.6, *)
+//    override func moveToRightEndOfLineAndModifySelection(_ sender: Any?) {
+//    }
 
     override func scrollPageUp(_ sender: Any?) {
     }
