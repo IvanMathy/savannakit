@@ -222,8 +222,6 @@ extension InnerTextView {
                 return nil
             }
             
-            print(start, end, info)
-            
             return NSRange(location: Swift.min(start, end), length: abs(start - end))
         })
          //   self.insertionRanges?.append(NSRange(location: index, length: 0))
@@ -347,6 +345,7 @@ extension InnerTextView {
 //            super.keyDown(with: event)
 //        }
 //    }
+    
     
     override func insertText(_ insertString: Any) {
 

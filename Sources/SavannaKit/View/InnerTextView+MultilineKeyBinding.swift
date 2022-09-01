@@ -47,6 +47,10 @@ extension InnerTextView {
             
             let newRange = self.getLineRange(for: range.upperBound)
             
+            guard range.upperBound != self.text.count else {
+                return NSRange(location: range.upperBound, length: 0)
+            }
+            
             let index = self.text.index(self.text.startIndex, offsetBy: newRange.upperBound - 1)
             
             let newLineOffset = (self.text[index].isNewline) ? 1 : 0

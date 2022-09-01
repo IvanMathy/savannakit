@@ -134,5 +134,24 @@ Here's a paragraph. Cheerio!
         XCTAssertEqual(view.textView.selectedRanges, [range(12, 64) as NSValue])
     }
     
+    func testMoveToBeginningOfLine() {
+        view.textView.insertionRanges = [range(7, 0), range(20, 5),  range(48, 0), range(56, 0)]
+        view.textView.moveToBeginningOfLine(nil)
+        
+        XCTAssertEqual(view.textView.insertionRanges,[range(0, 0), range(13, 0),range(48, 0), range(49, 0)])
+    }
+    
+    func testMoveToEndOfLine() {
+        view.textView.insertionRanges = [range(7, 0), range(20, 5),  range(48, 0), range(56, 0)]
+        view.textView.moveToEndOfLine(nil)
+        
+        XCTAssertEqual(view.textView.insertionRanges,[range(12, 0), range(47, 0),range(48, 0), range(83, 0)])
+        
+        view.textView.insertionRanges = [range(83, 0)]
+        
+        view.textView.moveToEndOfLine(nil)
+        
+        XCTAssertEqual(view.textView.insertionRanges,[range(83, 0)])
+    }
     
 }
