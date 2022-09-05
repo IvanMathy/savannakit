@@ -40,7 +40,8 @@ extension InnerTextView {
         var index = layoutManager.characterIndex(for: point, in: textContainer, fractionOfDistanceBetweenInsertionPoints: &fraction)
 
         if (fraction > 0.5 && index < textStorage.length &&
-            (textStorage.string as NSString).character(at: index) != 10)
+            (textStorage.string as NSString).character(at: index) != 10),
+           self.getCharacterRect(at: index + 1).origin.y <= point.y
         {
           index += 1;
         }
@@ -160,9 +161,9 @@ extension InnerTextView {
         // Here we pretend the selection started perfectly in the right spot
         let normalizedStartPoint = self.getCharacterRect(at: startIndex).origin
         
-        
         let min = min(currentIndex, startIndex)
         let max = max(currentIndex, startIndex)
+        
             
         var cursor = min
         let info = self.getLineInfo(for: cursor)
@@ -170,12 +171,13 @@ extension InnerTextView {
         
         let positionInLine = startIndex - range.lowerBound
         var infos = [info]
+
         
         while
             !range.contains(max),
             range.upperBound != self.textStorage?.length
         {
-            cursor = range.upperBound + 1
+            cursor = range.upperBound
             let info = self.getLineInfo(for: cursor)
             range = info.0
             infos.append(info)
@@ -189,13 +191,14 @@ extension InnerTextView {
             return
         }
         
-        //todo: handle last charcter in line
-        
         let delta = offsetIndex - startIndex
         
-      
+        
+        self.shouldDrawInsertionPoints = false
+        self.refreshInsertionRects()
         
         self.insertionRanges = infos.compactMap({ info in
+            
             
             let range = info.0
             var upper = range.upperBound
@@ -216,18 +219,21 @@ extension InnerTextView {
             
             guard
                 let start = characterIndex(at: CGPoint(x: normalizedStartPoint.x, y: y)),
-                let end = characterIndex(at: CGPoint(x: firstLinePoint.x, y: y)),
-                start != end // end of line
+                let end = characterIndex(at: CGPoint(x: firstLinePoint.x, y: y))
             else  {
                 return nil
             }
             
+            guard  start != end // end of line
+            else  {
+                return NSRange(location: start, length: 0)
+            }
+            
             return NSRange(location: Swift.min(start, end), length: abs(start - end))
         })
-         //   self.insertionRanges?.append(NSRange(location: index, length: 0))
-       
         
-        //self.layoutManager.rect
+        self.shouldDrawInsertionPoints = true
+        self.refreshInsertionRects()
     }
     
     func getCursorRects() -> [NSRect] {
