@@ -13,6 +13,7 @@ import Carbon.HIToolbox
 
 protocol InnerTextViewDelegate: class {
 	func didUpdateCursorFloatingState()
+    func didUpdateSelectedRanges()
 }
 
 final class InnerTextView: NSTextView {
@@ -27,8 +28,14 @@ final class InnerTextView: NSTextView {
     var startPoint: CGPoint?
     
     var insertionRanges: [NSRange]? {
+        willSet {
+            self.shouldDrawInsertionPoints = false
+            self.refreshInsertionRects()
+        }
         didSet {
             didSetInsertionRanges()
+            self.shouldDrawInsertionPoints = true
+            self.refreshInsertionRects()
         }
     }
     var cursorBlinkTimer: Timer?

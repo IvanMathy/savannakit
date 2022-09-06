@@ -17,6 +17,10 @@ extension SyntaxTextView: InnerTextViewDelegate {
 		selectionDidChange()
 		
 	}
+    
+    func didUpdateSelectedRanges() {
+        self.delegate?.didUpdateSelectionRanges(self)
+    }
 	
 }
 

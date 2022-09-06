@@ -41,10 +41,12 @@ extension InnerTextView {
 
         if (fraction > 0.5 && index < textStorage.length &&
             (textStorage.string as NSString).character(at: index) != 10),
-           self.getCharacterRect(at: index + 1).origin.y <= point.y
+           self.getCharacterRect(at: index + 1).origin.y <= point.y // Last char in line (but not in paragraph)
         {
           index += 1;
         }
+        
+        // TODO: what if the last char is a space?
 
         return index
     }
@@ -55,9 +57,6 @@ extension InnerTextView {
             if insertionRanges != nil {
                 self.cursorBlinkTimer?.invalidate()
                 self.cursorBlinkTimer = nil
-                
-                self.shouldDrawInsertionPoints = false
-                self.refreshInsertionRects()
                 self.insertionRanges = nil
             }
             
@@ -67,22 +66,10 @@ extension InnerTextView {
             
         }
         
-        if insertionRanges != nil {
-            self.shouldDrawInsertionPoints = false
-            self.refreshInsertionRects()
-        }
-        
         startPoint = self.convert(event.locationInWindow, from: nil)
         
         insertionRanges = []
         self.setSelectedRange(NSRange())
-        
-        
-        
-        self.shouldDrawInsertionPoints = true
-        self.refreshInsertionRects()
-        
-        
         
     }
     
@@ -193,10 +180,6 @@ extension InnerTextView {
         
         let delta = offsetIndex - startIndex
         
-        
-        self.shouldDrawInsertionPoints = false
-        self.refreshInsertionRects()
-        
         self.insertionRanges = infos.compactMap({ info in
             
             
@@ -232,8 +215,6 @@ extension InnerTextView {
             return NSRange(location: Swift.min(start, end), length: abs(start - end))
         })
         
-        self.shouldDrawInsertionPoints = true
-        self.refreshInsertionRects()
     }
     
     func getCursorRects() -> [NSRect] {
@@ -372,8 +353,7 @@ extension InnerTextView {
     
     func moveInsertionPoints(_ direction: MoveDirection) {
         self.setSelectedRange(NSRange())
-        self.shouldDrawInsertionPoints = false
-        self.refreshInsertionRects()
+        
         insertionRanges = insertionRanges?.compactMap {
             let position = (direction == .right) ? $0.upperBound : $0.lowerBound
             if $0.length > 0, [.left, .right].contains(direction) {
@@ -382,9 +362,6 @@ extension InnerTextView {
             }
             return self.move(position, direction, by: 1)
         }.map { NSRange(location: $0, length: 0) }
-        
-        self.shouldDrawInsertionPoints = true
-        self.refreshInsertionRects()
     }
     
     // this is peak function signature fight me

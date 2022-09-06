@@ -14,20 +14,11 @@ extension InnerTextView {
             return false
         }
         
-        
-        self.shouldDrawInsertionPoints = false
-        self.refreshInsertionRects()
-        
         self.insertionRanges = insertionRanges.map(replacementClosure)
-        self.shouldDrawInsertionPoints = true
-        self.refreshInsertionRects()
         
         return true;
     }
     
-    
-    override func moveBackward(_ sender: Any?) {
-    }
     
 //    override func moveWordForward(_ sender: Any?) { // ctrl + option + f
 //        print("move word forward")
@@ -42,15 +33,13 @@ extension InnerTextView {
             return super.moveToBeginningOfLine(sender)
         }
         
-        self.insertionRanges = insertionRanges.map {
-            range in
+        replaceRanges { range in
             
             let newRange = self.getLineRange(for: range.lowerBound)
             
             return NSRange(location: newRange.lowerBound, length: 0)
         }
-        self.shouldDrawInsertionPoints = true
-        self.refreshInsertionRects()
+        
     }
     
     override func moveToEndOfLine(_ sender: Any?) {
@@ -58,7 +47,7 @@ extension InnerTextView {
             return super.moveToBeginningOfLine(sender)
         }
         
-        self.insertionRanges = insertionRanges.map {
+        replaceRanges {
             range in
             
             let newRange = self.getLineRange(for: range.upperBound)
@@ -73,9 +62,6 @@ extension InnerTextView {
             
             return NSRange(location: newRange.upperBound - newLineOffset, length: 0)
         }
-        
-        self.shouldDrawInsertionPoints = true
-        self.refreshInsertionRects()
     }
     
     override func moveToBeginningOfParagraph(_ sender: Any?) {

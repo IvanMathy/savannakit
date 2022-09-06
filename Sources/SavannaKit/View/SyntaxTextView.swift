@@ -10,7 +10,7 @@ import Foundation
 import CoreGraphics
 import AppKit
 
-public protocol SyntaxTextViewDelegate: class {
+public protocol SyntaxTextViewDelegate: AnyObject {
 	
 	func didChangeText(_ syntaxTextView: SyntaxTextView)
 
@@ -21,6 +21,8 @@ public protocol SyntaxTextViewDelegate: class {
 	func lexerForSource(_ source: String) -> Lexer
     
     func theme(for appearance: NSAppearance) -> SyntaxColorTheme
+    
+    func didUpdateSelectionRanges(_ syntaxTextView: SyntaxTextView)
 }
 
 // Provide default empty implementations of methods that are optional.
@@ -31,6 +33,8 @@ public extension SyntaxTextViewDelegate {
     func didChangeSelectedRange(_ syntaxTextView: SyntaxTextView, selectedRange: NSRange) { }
 	
     func textViewDidBeginEditing(_ syntaxTextView: SyntaxTextView) { }
+    
+    func didUpdateSelectionRanges(_ syntaxTextView: SyntaxTextView) { }
 
 }
 

@@ -108,13 +108,6 @@ extension InnerTextView {
         self.moveInsertionPoints(.right)
     }
     
-    override func moveForward(_ sender: Any?) {
-        super.moveForward(sender)
-        
-        
-        // Todo: handle both writing directions? not sure when this function is used.
-    }
-    
     // Select
     
     override func selectAll(_ sender: Any?) {
@@ -122,6 +115,7 @@ extension InnerTextView {
         super.selectAll(sender)
     }
     
+    // TODO: keep track of how we should move
     
     override func moveLeftAndModifySelection(_ sender: Any?) {
         guard let insertionRanges = self.insertionRanges else {
@@ -144,7 +138,7 @@ extension InnerTextView {
     
     override func moveRightAndModifySelection(_ sender: Any?) {
         guard let insertionRanges = self.insertionRanges else {
-            return super.moveLeftAndModifySelection(sender)
+            return super.moveRightAndModifySelection(sender)
         }
         
         self.insertionRanges = insertionRanges.flatMap {
