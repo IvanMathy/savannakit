@@ -36,6 +36,7 @@ final class InnerTextView: NSTextView {
             didSetInsertionRanges()
             self.shouldDrawInsertionPoints = true
             self.refreshInsertionRects()
+            self.delegate?.didUpdateSelectedRanges()
         }
     }
     var cursorBlinkTimer: Timer?
