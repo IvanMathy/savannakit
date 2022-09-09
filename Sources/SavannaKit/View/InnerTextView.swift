@@ -27,7 +27,7 @@ public final class InnerTextView: NSTextView {
     var startIndex: Int?
     var startPoint: CGPoint?
     
-    var insertionRanges: [NSRange]? {
+    public var insertionRanges: [NSRange]? {
         willSet {
             self.shouldDrawInsertionPoints = false
             self.refreshInsertionRects()
