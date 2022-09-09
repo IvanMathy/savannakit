@@ -44,11 +44,11 @@ extension InnerTextView {
     
     // Delete
     
-    override func delete(_ sender: Any?) {
+    public override func delete(_ sender: Any?) {
         super.delete(sender)
     }
     
-    override func deleteForward(_ sender: Any?) {
+    public override func deleteForward(_ sender: Any?) {
         guard let insertionRanges = self.insertionRanges else {
             return super.deleteForward(sender)
         }
@@ -64,12 +64,12 @@ extension InnerTextView {
         }))
     }
     
-    override func deleteBackward(_ sender: Any?) {
+    public override func deleteBackward(_ sender: Any?) {
         guard let insertionRanges = self.insertionRanges else {
             return super.deleteBackward(sender)
         }
         
-        self.insertionRanges = self.insert(stringInRanges: insertionRanges.flatMap({ range in
+        self.insertionRanges = self.insert(stringInRanges: insertionRanges.compactMap({ range in
             guard range.location > 0 else {
                 return nil
             }
@@ -81,27 +81,27 @@ extension InnerTextView {
     }
     // Move
     
-    override func moveUp(_ sender: Any?) {
+    public override func moveUp(_ sender: Any?) {
         guard (self.insertionRanges != nil) else {
             return super.moveUp(sender)
         }
         self.moveInsertionPoints(.up)
     }
     
-    override func moveDown(_ sender: Any?) {
+    public override func moveDown(_ sender: Any?) {
         guard (self.insertionRanges != nil) else {
             return super.moveDown(sender)
         }
         self.moveInsertionPoints(.down)
     }
     
-    override func moveLeft(_ sender: Any?) {
+    public override func moveLeft(_ sender: Any?) {
         guard (self.insertionRanges != nil) else {
             return super.moveLeft(sender)
         }
         self.moveInsertionPoints(.left)
     }
-    override func moveRight(_ sender: Any?) {
+    public override func moveRight(_ sender: Any?) {
         guard (self.insertionRanges != nil) else {
             return super.moveRight(sender)
         }
@@ -110,14 +110,14 @@ extension InnerTextView {
     
     // Select
     
-    override func selectAll(_ sender: Any?) {
+    public override func selectAll(_ sender: Any?) {
         self.insertionRanges = nil
         super.selectAll(sender)
     }
     
     // TODO: keep track of how we should move
     
-    override func moveLeftAndModifySelection(_ sender: Any?) {
+    public override func moveLeftAndModifySelection(_ sender: Any?) {
         guard let insertionRanges = self.insertionRanges else {
             return super.moveLeftAndModifySelection(sender)
         }
@@ -136,12 +136,12 @@ extension InnerTextView {
         }
     }
     
-    override func moveRightAndModifySelection(_ sender: Any?) {
+    public override func moveRightAndModifySelection(_ sender: Any?) {
         guard let insertionRanges = self.insertionRanges else {
             return super.moveRightAndModifySelection(sender)
         }
         
-        self.insertionRanges = insertionRanges.flatMap {
+        self.insertionRanges = insertionRanges.compactMap {
             range in
             
             guard
@@ -157,7 +157,7 @@ extension InnerTextView {
         }
     }
     
-    override func moveDownAndModifySelection(_ sender: Any?) {
+    public override func moveDownAndModifySelection(_ sender: Any?) {
         if
             let insertionRanges = self.insertionRanges?.sorted(
                 by: { $0.lowerBound < $1.lowerBound }),
@@ -172,7 +172,7 @@ extension InnerTextView {
         super.moveDownAndModifySelection(sender)
     }
     
-    override func moveUpAndModifySelection(_ sender: Any?) {
+    public override func moveUpAndModifySelection(_ sender: Any?) {
         if
             let insertionRanges = self.insertionRanges?.sorted(
                 by: { $0.lowerBound < $1.lowerBound }),

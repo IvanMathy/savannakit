@@ -28,8 +28,8 @@ extension InnerTextView {
 //        print("move word backwards")
 //    }
     
-    override func moveToBeginningOfLine(_ sender: Any?) {
-        guard let insertionRanges = self.insertionRanges else {
+    public override func moveToBeginningOfLine(_ sender: Any?) {
+        guard self.insertionRanges != nil else {
             return super.moveToBeginningOfLine(sender)
         }
         
@@ -42,8 +42,8 @@ extension InnerTextView {
         
     }
     
-    override func moveToEndOfLine(_ sender: Any?) {
-        guard let insertionRanges = self.insertionRanges else {
+    public override func moveToEndOfLine(_ sender: Any?) {
+        guard self.insertionRanges != nil else {
             return super.moveToBeginningOfLine(sender)
         }
         
@@ -64,20 +64,20 @@ extension InnerTextView {
         }
     }
     
-    override func moveToBeginningOfParagraph(_ sender: Any?) {
+    public override func moveToBeginningOfParagraph(_ sender: Any?) {
         print("moveToBeginningOfParagraph")
     }
     
-    override func moveToEndOfParagraph(_ sender: Any?) {
+    public override func moveToEndOfParagraph(_ sender: Any?) {
         print("moveToEndOfParagraph")
     }
     
-    override func moveToEndOfDocument(_ sender: Any?) {
+    public override func moveToEndOfDocument(_ sender: Any?) {
         self.insertionRanges = nil;
         super.moveToEndOfDocument(sender)
     }
     
-    override func moveToBeginningOfDocument(_ sender: Any?) {
+    public override func moveToBeginningOfDocument(_ sender: Any?) {
         self.insertionRanges = nil;
         super.moveToBeginningOfDocument(sender)
     }
@@ -97,14 +97,14 @@ extension InnerTextView {
 //    override func moveForwardAndModifySelection(_ sender: Any?) {
 //    }
     
-    override func moveWordForwardAndModifySelection(_ sender: Any?) {
+    public override func moveWordForwardAndModifySelection(_ sender: Any?) {
     }
 
-    override func moveWordBackwardAndModifySelection(_ sender: Any?) {
+    public override func moveWordBackwardAndModifySelection(_ sender: Any?) {
     }
 
 
-    override func moveToBeginningOfLineAndModifySelection(_ sender: Any?) {
+    public override func moveToBeginningOfLineAndModifySelection(_ sender: Any?) {
         guard replaceRanges(with: { range in
             let newRange = self.getLineRange(for: range.lowerBound)
             return NSRange(location: newRange.lowerBound, length: range.upperBound - newRange.lowerBound)
@@ -113,7 +113,7 @@ extension InnerTextView {
         }
     }
 
-    override func moveToEndOfLineAndModifySelection(_ sender: Any?) {
+    public override func moveToEndOfLineAndModifySelection(_ sender: Any?) {
         guard replaceRanges(with: { range in
             let newRange = self.getLineRange(for: range.upperBound)
             return NSRange(location: range.lowerBound, length: newRange.upperBound - range.lowerBound)
@@ -122,41 +122,41 @@ extension InnerTextView {
         }
     }
 
-    override func moveToBeginningOfParagraphAndModifySelection(_ sender: Any?) {
+    public override func moveToBeginningOfParagraphAndModifySelection(_ sender: Any?) {
     }
 
-    override func moveToEndOfParagraphAndModifySelection(_ sender: Any?) {
+    public override func moveToEndOfParagraphAndModifySelection(_ sender: Any?) {
     }
 
-    override func moveToEndOfDocumentAndModifySelection(_ sender: Any?) {
+    public override func moveToEndOfDocumentAndModifySelection(_ sender: Any?) {
     }
 
-    override func moveToBeginningOfDocumentAndModifySelection(_ sender: Any?) {
+    public override func moveToBeginningOfDocumentAndModifySelection(_ sender: Any?) {
     }
 
-    override func pageDownAndModifySelection(_ sender: Any?) {
+    public override func pageDownAndModifySelection(_ sender: Any?) {
     }
 
-    override func pageUpAndModifySelection(_ sender: Any?) {
+    public override func pageUpAndModifySelection(_ sender: Any?) {
     }
 
-    override func moveParagraphForwardAndModifySelection(_ sender: Any?) {
+    public override func moveParagraphForwardAndModifySelection(_ sender: Any?) {
     }
 
-    override func moveParagraphBackwardAndModifySelection(_ sender: Any?) {
+    public override func moveParagraphBackwardAndModifySelection(_ sender: Any?) {
         
     }
     
-    override func moveWordRight(_ sender: Any?) {
+    public override func moveWordRight(_ sender: Any?) {
     }
 
-    override func moveWordLeft(_ sender: Any?) {
+    public override func moveWordLeft(_ sender: Any?) {
     }
 
-    override func moveWordRightAndModifySelection(_ sender: Any?) {
+    public override func moveWordRightAndModifySelection(_ sender: Any?) {
     }
 
-    override func moveWordLeftAndModifySelection(_ sender: Any?) {
+    public override func moveWordLeftAndModifySelection(_ sender: Any?) {
     }
 
     // these call moveToBeginningOfLine and such
@@ -178,104 +178,104 @@ extension InnerTextView {
 //    override func moveToRightEndOfLineAndModifySelection(_ sender: Any?) {
 //    }
 
-    override func scrollPageUp(_ sender: Any?) {
+    public override func scrollPageUp(_ sender: Any?) {
     }
 
-    override func scrollPageDown(_ sender: Any?) {
+    public override func scrollPageDown(_ sender: Any?) {
     }
 
-    override func scrollLineUp(_ sender: Any?) {
+    public override func scrollLineUp(_ sender: Any?) {
     }
 
-    override func scrollLineDown(_ sender: Any?) {
+    public override func scrollLineDown(_ sender: Any?) {
     }
     
-    override func scrollToBeginningOfDocument(_ sender: Any?) {
+    public override func scrollToBeginningOfDocument(_ sender: Any?) {
     }
 
-    override func scrollToEndOfDocument(_ sender: Any?) {
+    public override func scrollToEndOfDocument(_ sender: Any?) {
     }
 
     // Graphical Element transposition
-    override func transpose(_ sender: Any?) { // ctrl + t
+    public override func transpose(_ sender: Any?) { // ctrl + t
     }
 
-    override func transposeWords(_ sender: Any?) {
+    public override func transposeWords(_ sender: Any?) {
     }
 
-    override func selectParagraph(_ sender: Any?) {
+    public override func selectParagraph(_ sender: Any?) {
     }
 
-    override func selectLine(_ sender: Any?) {
+    public override func selectLine(_ sender: Any?) {
     }
 
-    override func selectWord(_ sender: Any?) {
+    public override func selectWord(_ sender: Any?) {
         super.selectWord(sender);
         // https://developer.apple.com/documentation/appkit/nstextview/1449188-selectionrange
     }
 
     // Insertions and Indentations
-    override func indent(_ sender: Any?) {
+    public override func indent(_ sender: Any?) {
     }
 
 //    override func insertNewline(_ sender: Any?) {
 //    }
 
-    override func insertParagraphSeparator(_ sender: Any?) {
+    public override func insertParagraphSeparator(_ sender: Any?) {
     }
 
-    override func insertNewlineIgnoringFieldEditor(_ sender: Any?) {
+    public override func insertNewlineIgnoringFieldEditor(_ sender: Any?) {
     }
 
-    override func insertTabIgnoringFieldEditor(_ sender: Any?) {
+    public override func insertTabIgnoringFieldEditor(_ sender: Any?) {
     }
 
-    override func insertLineBreak(_ sender: Any?) {
+    public override func insertLineBreak(_ sender: Any?) {
     }
     
-    override func insertContainerBreak(_ sender: Any?) {
+    public override func insertContainerBreak(_ sender: Any?) {
     }
 
     @available(macOS 10.5, *)
-    override func insertSingleQuoteIgnoringSubstitution(_ sender: Any?) {
+    public override func insertSingleQuoteIgnoringSubstitution(_ sender: Any?) {
     }
 
     @available(macOS 10.5, *)
-    override func insertDoubleQuoteIgnoringSubstitution(_ sender: Any?) {
+    public override func insertDoubleQuoteIgnoringSubstitution(_ sender: Any?) {
     }
 
     // Case changes
-    override func changeCaseOfLetter(_ sender: Any?) {
+    public override func changeCaseOfLetter(_ sender: Any?) {
     }
 
-    override func uppercaseWord(_ sender: Any?) {
+    public override func uppercaseWord(_ sender: Any?) {
     }
 
-    override func lowercaseWord(_ sender: Any?) {
+    public override func lowercaseWord(_ sender: Any?) {
     }
 
-    override func capitalizeWord(_ sender: Any?) {
+    public override func capitalizeWord(_ sender: Any?) {
     }
 
     // Deletions
 
 
-    override func deleteBackwardByDecomposingPreviousCharacter(_ sender: Any?) {
+    public override func deleteBackwardByDecomposingPreviousCharacter(_ sender: Any?) {
     }
 
-    override func deleteWordForward(_ sender: Any?) { // option + shift + delete
+    public override func deleteWordForward(_ sender: Any?) { // option + shift + delete
     }
 
-    override func deleteWordBackward(_ sender: Any?) { // option + delete
+    public override func deleteWordBackward(_ sender: Any?) { // option + delete
     }
 
-    override func deleteToBeginningOfLine(_ sender: Any?) {
+    public override func deleteToBeginningOfLine(_ sender: Any?) {
     }
 
-    override func deleteToEndOfLine(_ sender: Any?) {
+    public override func deleteToEndOfLine(_ sender: Any?) {
     }
 
-    override func deleteToBeginningOfParagraph(_ sender: Any?) {
+    public override func deleteToBeginningOfParagraph(_ sender: Any?) {
     }
 }
 

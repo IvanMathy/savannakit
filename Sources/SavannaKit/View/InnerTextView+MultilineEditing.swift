@@ -51,7 +51,7 @@ extension InnerTextView {
         return index
     }
     
-    override func mouseDown(with event: NSEvent) {
+    public override func mouseDown(with event: NSEvent) {
         guard event.modifierFlags.contains(.option) else {
             
             if insertionRanges != nil {
@@ -73,7 +73,7 @@ extension InnerTextView {
         
     }
     
-    override func mouseDragged(with event: NSEvent) {
+    public override func mouseDragged(with event: NSEvent) {
 //        let index = characterIndex(for: event)!
 //        let glyphIndex = (layoutManager?.glyphIndexForCharacter(at: index))!
 //
@@ -170,7 +170,7 @@ extension InnerTextView {
             infos.append(info)
         }
         
-        let startRange = self.getLineRange(for: startIndex)
+        _ = self.getLineRange(for: startIndex)
         
         let firstLinePoint = CGPoint(x: currentPoint.x + normalizedStartPoint.x - startPoint.x, y: startPoint.y)
         
@@ -236,7 +236,7 @@ extension InnerTextView {
                 isLastChar = true
             }
             
-            var rect = getCharacterRect(at: location)
+            let rect = getCharacterRect(at: location)
             var origin = rect.origin
             
             if(isLastChar) {
@@ -259,7 +259,7 @@ extension InnerTextView {
         }
     }
     
-    override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
+    public override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
         guard self.insertionRanges == nil else {
             // No thanks I make my own
             return
@@ -294,7 +294,7 @@ extension InnerTextView {
 //
 //    }
     
-    override func draw(_ dirtyRect: NSRect) {
+    public override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
         guard shouldDrawInsertionPoints else {
@@ -317,7 +317,7 @@ extension InnerTextView {
 //        }
 //    }
     
-    override func mouseUp(with event: NSEvent) {
+    public override func mouseUp(with event: NSEvent) {
         
         startIndex = nil
     }
@@ -334,7 +334,7 @@ extension InnerTextView {
 //    }
     
     
-    override func insertText(_ insertString: Any) {
+    public override func insertText(_ insertString: Any) {
 
         guard let insertionRanges = insertionRanges, let insertString = insertString as? String else {
             return super.insertText(insertString)

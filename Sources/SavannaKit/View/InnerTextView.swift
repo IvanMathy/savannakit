@@ -42,7 +42,7 @@ public final class InnerTextView: NSTextView {
     var cursorBlinkTimer: Timer?
     var shouldDrawInsertionPoints = false
     
-    override func menu(for event: NSEvent) -> NSMenu? {
+    public override func menu(for event: NSEvent) -> NSMenu? {
         let menu = super.menu(for: event)
         
         let bannedItems = [
@@ -68,12 +68,12 @@ public final class InnerTextView: NSTextView {
     
     // Automatic closing
     
-    override func insertBacktab(_ sender: Any?) {
+    public override func insertBacktab(_ sender: Any?) {
         // TODO: Handle this
     }
     
     
-    override func insertText(_ string: Any, replacementRange: NSRange) {
+    public override func insertText(_ string: Any, replacementRange: NSRange) {
         switch string as? String {
            case "[":
                insertAfter(string, "]")
@@ -136,7 +136,7 @@ public final class InnerTextView: NSTextView {
         self.setSelectedRange(originalRange)
     }
 	
-    override func insertTab(_ sender: Any?) {
+    public override func insertTab(_ sender: Any?) {
         
         self.undoManager?.beginUndoGrouping()
         
@@ -162,13 +162,13 @@ public final class InnerTextView: NSTextView {
 
     var overscrollY: CGFloat = 0
 
-    override var textContainerOrigin: NSPoint {
+    public override var textContainerOrigin: NSPoint {
         return super
             .textContainerOrigin
             .applying(.init(translationX: 0, y: -overscrollY))
     }
     
-    override var readablePasteboardTypes: [NSPasteboard.PasteboardType] {
+    public override var readablePasteboardTypes: [NSPasteboard.PasteboardType] {
         return [.string]
     }
 }
