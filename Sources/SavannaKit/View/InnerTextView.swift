@@ -16,7 +16,7 @@ protocol InnerTextViewDelegate: class {
     func didUpdateSelectedRanges()
 }
 
-final class InnerTextView: NSTextView {
+public final class InnerTextView: NSTextView {
 
 	weak var innerDelegate: InnerTextViewDelegate?
 	var theme: SyntaxColorTheme?
