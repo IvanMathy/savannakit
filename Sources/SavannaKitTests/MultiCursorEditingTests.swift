@@ -155,16 +155,16 @@ Here's a paragraph. Cheerio!
   }
   
   func testmoveWordRight() {
-    view.textView.insertionRanges = [range(7, 0), range(20, 5),  range(48, 0), range(56, 0)]
+    view.textView.insertionRanges = [range(6, 0), range(19, 0), range(48, 0), range(55, 0)]
     view.textView.moveToEndOfLine(nil)
     
     XCTAssertEqual(view.textView.insertionRanges,[range(12, 0), range(47, 0),range(48, 0), range(83, 0)])
     
-    view.textView.insertionRanges = [range(83, 0)]
+    view.textView.insertionRanges = [range(68, 0)]
     
     view.textView.moveToEndOfLine(nil)
     
-    XCTAssertEqual(view.textView.insertionRanges,[range(83, 0)])
+    XCTAssertEqual(view.textView.insertionRanges,[range(74, 0)])
   }
   
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -685,7 +686,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="480" height="360"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -701,6 +702,24 @@
                     <constraint firstAttribute="bottom" secondItem="ziC-Ub-MIu" secondAttribute="bottom" id="uJr-pY-8vD"/>
                 </constraints>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="39E80464-776E-472F-B382-5FBEF199C28D" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="M0E-fk-JaO">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="9C9F2E24-2598-42FC-9341-7DCDBE6D5865" label="Log Ranges" paletteLabel="Log Ranges" tag="-1" bordered="YES" id="CYi-w7-vGj">
+                        <imageReference key="image" image="printer.dotmatrix" catalog="system" symbolScale="large"/>
+                        <size key="minSize" width="35" height="25"/>
+                        <size key="maxSize" width="35" height="25"/>
+                        <connections>
+                            <action selector="printRanges:" target="yZG-6J-Ibl" id="4kk-gd-nbb"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="t6F-1L-5an"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="U62-Tx-cKR"/>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="CYi-w7-vGj"/>
+                    <toolbarItem reference="U62-Tx-cKR"/>
+                </defaultToolbarItems>
+            </toolbar>
             <point key="canvasLocation" x="139" y="467"/>
         </window>
         <viewController id="yZG-6J-Ibl" customClass="MacViewController" customModule="macOS_Example" customModuleProvider="target">
@@ -711,4 +730,7 @@
             </connections>
         </viewController>
     </objects>
+    <resources>
+        <image name="printer.dotmatrix" catalog="system" width="23" height="21"/>
+    </resources>
 </document>

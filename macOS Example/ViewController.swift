@@ -29,6 +29,13 @@ class MacViewController: NSViewController {
         """
         
     }
+  
+  @IBAction func printRanges(_ sender: Any) {
+    let ranges = (syntaxTextView.contentTextView as! InnerTextView).insertionRanges ?? syntaxTextView.contentTextView.selectedRanges as [NSRange]
+    let string: [String] = ranges.map({ range in "range(\(range.location), \(range.length))"})
+    print("[" + string.joined(separator: ", ") + "]")
+  }
+  
     
 }
 
