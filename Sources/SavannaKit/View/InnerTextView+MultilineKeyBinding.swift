@@ -98,9 +98,17 @@ extension InnerTextView {
 //    }
     
     public override func moveWordForwardAndModifySelection(_ sender: Any?) {
+      guard self.insertionRanges != nil else {
+          return super.moveWordForwardAndModifySelection(sender)
+      }
+      fatalError("Unimplemented")
     }
 
     public override func moveWordBackwardAndModifySelection(_ sender: Any?) {
+      guard self.insertionRanges != nil else {
+          return super.moveWordForwardAndModifySelection(sender)
+      }
+      fatalError("Unimplemented")
     }
 
 
@@ -148,15 +156,31 @@ extension InnerTextView {
     }
     
     public override func moveWordRight(_ sender: Any?) {
+      guard self.insertionRanges != nil else {
+          return super.moveWordRight(sender)
+      }
+      fatalError("Unimplemented")
     }
 
     public override func moveWordLeft(_ sender: Any?) {
+      guard self.insertionRanges != nil else {
+          return super.moveWordLeft(sender)
+      }
+      fatalError("Unimplemented")
     }
 
     public override func moveWordRightAndModifySelection(_ sender: Any?) {
+      guard self.insertionRanges != nil else {
+          return super.moveWordRightAndModifySelection(sender)
+      }
+      fatalError("Unimplemented")
     }
 
     public override func moveWordLeftAndModifySelection(_ sender: Any?) {
+      guard self.insertionRanges != nil else {
+          return super.moveWordLeftAndModifySelection(sender)
+      }
+      fatalError("Unimplemented")
     }
 
     // these call moveToBeginningOfLine and such

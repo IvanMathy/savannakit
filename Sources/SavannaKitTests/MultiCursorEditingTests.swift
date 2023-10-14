@@ -18,140 +18,153 @@ Here's another paragraph. Cheerio!
 """
 
 class MultiCursorEditingTests: XCTestCase {
+  
+  func range(_ location: Int, _ length: Int) -> NSRange {
+    return NSRange(location: location, length: length)
+  }
+  
+  
+  
+  var view: SyntaxTextView!
+  
+  let delegate = Delegate()
+  
+  struct MyTheme: SyntaxColorTheme {
+    var lineNumbersStyle: LineNumbersStyle?
     
-    func range(_ location: Int, _ length: Int) -> NSRange {
-        return NSRange(location: location, length: length)
+    var gutterStyle: GutterStyle = .init(backgroundColor: .red, minimumWidth: 0)
+    
+    var font = NSFont.systemFont(ofSize: 2)
+    
+    var backgroundColor = NSColor.red
+    
+    func globalAttributes() -> [NSAttributedString.Key : Any] {
+      return [:]
+    }
+    
+    func attributes(for token: Token) -> [NSAttributedString.Key : Any] {
+      return [:]
+    }
+    
+    var tabWidth = 0
+  }
+  
+  class Delegate: SyntaxTextViewDelegate {
+    func lexerForSource(_ source: String) -> Lexer {
+      return BoopLexer()
+    }
+    
+    func theme(for appearance: NSAppearance) -> SyntaxColorTheme {
+      return MyTheme()
     }
     
     
+  }
+  
+  override func setUp() {
+    super.setUp()
     
-    var view: SyntaxTextView!
+    view = SyntaxTextView()
     
-    let delegate = Delegate()
+    view.delegate = delegate
+    view.text = sampleText
+  }
+  
+  func testDeleteBackward() {
     
-    struct MyTheme: SyntaxColorTheme {
-        var lineNumbersStyle: LineNumbersStyle?
-        
-        var gutterStyle: GutterStyle = .init(backgroundColor: .red, minimumWidth: 0)
-        
-        var font = NSFont.systemFont(ofSize: 2)
-        
-        var backgroundColor = NSColor.red
-        
-        func globalAttributes() -> [NSAttributedString.Key : Any] {
-            return [:]
-        }
-        
-        func attributes(for token: Token) -> [NSAttributedString.Key : Any] {
-            return [:]
-        }
-        
-        var tabWidth = 0
-    }
+    view.textView.insertionRanges = [range(12, 0), range(34, 0), range(57, 6), range(0, 0), range(83, 0)]
+    view.textView.deleteBackward(nil)
     
-    class Delegate: SyntaxTextViewDelegate {
-        func lexerForSource(_ source: String) -> Lexer {
-            return BoopLexer()
-        }
-        
-        func theme(for appearance: NSAppearance) -> SyntaxColorTheme {
-            return MyTheme()
-        }
-        
-        
-    }
     
-    override func setUp() {
-        super.setUp()
-        
-        view = SyntaxTextView()
-        
-        view.delegate = delegate
-        view.text = sampleText
-    }
-
-    func testDeleteBackward() {
-        
-        view.textView.insertionRanges = [range(12, 0), range(34, 0), range(57, 6), range(0, 0), range(83, 0)]
-        view.textView.deleteBackward(nil)
-        
-        
-        XCTAssertEqual(view.text, """
+    XCTAssertEqual(view.text, """
 Hello world
 This is a sample of  longer text.
 
 Here's a paragraph. Cheerio
 """)
-    }
+  }
+  
+  func testDeleteForward() {
     
-    func testDeleteForward() {
-        
-        view.textView.insertionRanges = [ range(0, 0),range(11, 0), range(34, 0), range(57, 6), range(83, 0)]
-        view.textView.deleteForward(nil)
-        
-        
-        XCTAssertEqual(view.text, """
+    view.textView.insertionRanges = [ range(0, 0),range(11, 0), range(34, 0), range(57, 6), range(83, 0)]
+    view.textView.deleteForward(nil)
+    
+    
+    XCTAssertEqual(view.text, """
 ello world
 This is a sample of alonger text.
 
 Here's a paragraph. Cheerio!
 """)
-    }
+  }
+  
+  func testMoveLeftAndModifySelection() {
     
-    func testMoveLeftAndModifySelection() {
-        
-        view.textView.insertionRanges = [range(0, 0), range(1, 0),range(11, 0), range(34, 0), range(57, 6), range(83, 0)]
-        view.textView.moveLeftAndModifySelection(nil)
-        
-        
-        XCTAssertEqual(view.textView.insertionRanges, [range(0, 0), range(0, 1),range(10, 1), range(33, 1), range(56, 7), range(82, 1)])
-    }
+    view.textView.insertionRanges = [range(0, 0), range(1, 0),range(11, 0), range(34, 0), range(57, 6), range(83, 0)]
+    view.textView.moveLeftAndModifySelection(nil)
     
-    func testMoveRightAndModifySelection() {
-        
-        view.textView.insertionRanges = [range(0, 0), range(1, 0),range(11, 0), range(34, 0), range(57, 6), range(83, 0)]
-        view.textView.moveRightAndModifySelection(nil)
-        
-        
-        XCTAssertEqual(view.textView.insertionRanges,[range(0, 1), range(1, 1),range(11, 1), range(34, 1), range(57, 7), range(83, 0)])
-    }
     
-    func testMoveDownAndModifySelection() {
-        view.textView.insertionRanges = [range(11, 0), range(34, 6)]
-        view.textView.moveDownAndModifySelection(nil)
-        
-        XCTAssertNil(view.textView.insertionRanges)
-        
-        XCTAssertEqual(view.textView.selectedRanges, [range(11, 37) as NSValue])
-    }
+    XCTAssertEqual(view.textView.insertionRanges, [range(0, 0), range(0, 1),range(10, 1), range(33, 1), range(56, 7), range(82, 1)])
+  }
+  
+  func testMoveRightAndModifySelection() {
     
-    func testMoveUpAndModifySelection() {
-        view.textView.insertionRanges = [range(34, 0), range(70, 6)]
-        view.textView.moveUpAndModifySelection(nil)
-        
-        XCTAssertNil(view.textView.insertionRanges)
-        
-        XCTAssertEqual(view.textView.selectedRanges, [range(12, 64) as NSValue])
-    }
+    view.textView.insertionRanges = [range(0, 0), range(1, 0),range(11, 0), range(34, 0), range(57, 6), range(83, 0)]
+    view.textView.moveRightAndModifySelection(nil)
     
-    func testMoveToBeginningOfLine() {
-        view.textView.insertionRanges = [range(7, 0), range(20, 5),  range(48, 0), range(56, 0)]
-        view.textView.moveToBeginningOfLine(nil)
-        
-        XCTAssertEqual(view.textView.insertionRanges,[range(0, 0), range(13, 0),range(48, 0), range(49, 0)])
-    }
     
-    func testMoveToEndOfLine() {
-        view.textView.insertionRanges = [range(7, 0), range(20, 5),  range(48, 0), range(56, 0)]
-        view.textView.moveToEndOfLine(nil)
-        
-        XCTAssertEqual(view.textView.insertionRanges,[range(12, 0), range(47, 0),range(48, 0), range(83, 0)])
-        
-        view.textView.insertionRanges = [range(83, 0)]
-        
-        view.textView.moveToEndOfLine(nil)
-        
-        XCTAssertEqual(view.textView.insertionRanges,[range(83, 0)])
-    }
+    XCTAssertEqual(view.textView.insertionRanges,[range(0, 1), range(1, 1),range(11, 1), range(34, 1), range(57, 7), range(83, 0)])
+  }
+  
+  func testMoveDownAndModifySelection() {
+    view.textView.insertionRanges = [range(11, 0), range(34, 6)]
+    view.textView.moveDownAndModifySelection(nil)
     
+    XCTAssertNil(view.textView.insertionRanges)
+    
+    XCTAssertEqual(view.textView.selectedRanges, [range(11, 37) as NSValue])
+  }
+  
+  func testMoveUpAndModifySelection() {
+    view.textView.insertionRanges = [range(34, 0), range(70, 6)]
+    view.textView.moveUpAndModifySelection(nil)
+    
+    XCTAssertNil(view.textView.insertionRanges)
+    
+    XCTAssertEqual(view.textView.selectedRanges, [range(12, 64) as NSValue])
+  }
+  
+  func testMoveToBeginningOfLine() {
+    view.textView.insertionRanges = [range(7, 0), range(20, 5),  range(48, 0), range(56, 0)]
+    view.textView.moveToBeginningOfLine(nil)
+    
+    XCTAssertEqual(view.textView.insertionRanges,[range(0, 0), range(13, 0),range(48, 0), range(49, 0)])
+  }
+  
+  func testMoveToEndOfLine() {
+    view.textView.insertionRanges = [range(7, 0), range(20, 5),  range(48, 0), range(56, 0)]
+    view.textView.moveToEndOfLine(nil)
+    
+    XCTAssertEqual(view.textView.insertionRanges,[range(12, 0), range(47, 0),range(48, 0), range(83, 0)])
+    
+    view.textView.insertionRanges = [range(83, 0)]
+    
+    view.textView.moveToEndOfLine(nil)
+    
+    XCTAssertEqual(view.textView.insertionRanges,[range(83, 0)])
+  }
+  
+  func testmoveWordRight() {
+    view.textView.insertionRanges = [range(7, 0), range(20, 5),  range(48, 0), range(56, 0)]
+    view.textView.moveToEndOfLine(nil)
+    
+    XCTAssertEqual(view.textView.insertionRanges,[range(12, 0), range(47, 0),range(48, 0), range(83, 0)])
+    
+    view.textView.insertionRanges = [range(83, 0)]
+    
+    view.textView.moveToEndOfLine(nil)
+    
+    XCTAssertEqual(view.textView.insertionRanges,[range(83, 0)])
+  }
+  
 }
