@@ -19,6 +19,7 @@
 		2C7B49F52285072600030962 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C7B49F32285072600030962 /* MainMenu.xib */; };
 		2C7B49FD2285085C00030962 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B49FC2285085C00030962 /* ViewController.swift */; };
 		2C7B49FE22850B8300030962 /* SavannaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE15626E1EFE9E7C00EB3723 /* SavannaKit.framework */; };
+		2C8353202ADBACF40000B86F /* InnerTextView+Multiline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83531F2ADBACF40000B86F /* InnerTextView+Multiline.swift */; };
 		2C9276C624C68D3500576B1F /* NewBoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7A093724C68C0800596D31 /* NewBoopLexer.swift */; };
 		2C9276CA24C7B84100576B1F /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9276C924C7B84100576B1F /* PerformanceTests.swift */; };
 		2CD2D70024C3886E0091DD26 /* BoopLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD2D6FF24C3886D0091DD26 /* BoopLexer.swift */; };
@@ -66,6 +67,7 @@
 		2C7B49F62285072600030962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C7B49F72285072600030962 /* macOS_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS_Example.entitlements; sourceTree = "<group>"; };
 		2C7B49FC2285085C00030962 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2C83531F2ADBACF40000B86F /* InnerTextView+Multiline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InnerTextView+Multiline.swift"; sourceTree = "<group>"; };
 		2C9276C924C7B84100576B1F /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PerformanceTests.swift; path = Sources/SavannaKitTests/PerformanceTests.swift; sourceTree = SOURCE_ROOT; };
 		2CD2D6FF24C3886D0091DD26 /* BoopLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoopLexer.swift; sourceTree = "<group>"; };
 		2CD2D70624C388910091DD26 /* AliceInWonderland.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AliceInWonderland.txt; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				BE42803A2038C3AA00C8FE24 /* Paragraphs.swift */,
 				BE21904A2053318600BFB99A /* SyntaxTextViewLayoutManager.swift */,
 				2C5AB3C82324A15D0060DCE9 /* LineRulerView.swift */,
+				2C83531F2ADBACF40000B86F /* InnerTextView+Multiline.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 			files = (
 				BE71CB8A1F125E7500C6B93E /* String+Range.swift in Sources */,
 				BEE5D952202789840040C72A /* Paragraph.swift in Sources */,
+				2C8353202ADBACF40000B86F /* InnerTextView+Multiline.swift in Sources */,
 				BEC34E9520EE74AC00DE7411 /* RegexLexer.swift in Sources */,
 				BE21904C20533BEB00BFB99A /* SyntaxTextViewLayoutManager.swift in Sources */,
 				BE71CB8D1F125E8800C6B93E /* NSTextView+UIKit.swift in Sources */,
@@ -541,7 +545,7 @@
 				INFOPLIST_FILE = Platforms/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.okatbest.savannakit;
 				PRODUCT_MODULE_NAME = SavannaKit;
 				PRODUCT_NAME = SavannaKit;
@@ -570,7 +574,7 @@
 				INFOPLIST_FILE = Platforms/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.okatbest.savannakit;
 				PRODUCT_MODULE_NAME = SavannaKit;
 				PRODUCT_NAME = SavannaKit;
