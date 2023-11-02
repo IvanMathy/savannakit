@@ -223,9 +223,7 @@ extension InnerTextView {
         }
         
         return selectionRanges.compactMap({ range in
-            guard range.length == 0 else {
-                return nil
-            }
+            guard range.length == 0 else { return nil }
             
             // use previous character rect for cursor position
             var location = range.location
@@ -239,7 +237,7 @@ extension InnerTextView {
             let rect = getCharacterRect(at: location)
             var origin = rect.origin
             
-            if(isLastChar) {
+            if isLastChar {
                 origin = NSPoint(x: origin.x + rect.width, y: origin.y)
             }
             
@@ -247,7 +245,6 @@ extension InnerTextView {
             // thought saying I cared about "Pixel perfection" was cool.
             // I mean caring is cool, but saying it is very much  not.
             origin = NSPoint(x: round(origin.x) - 1, y: origin.y)
-            
             
             return NSRect(origin: origin, size: NSSize(width: 1, height: rect.height))
         })
@@ -344,10 +341,8 @@ extension InnerTextView {
         
     }
     
-    
     func setSelectionRanges(_ ranges: [NSRange]) {
         self.insertionRanges = ranges
-        
         self.selectedRanges = ranges.filter { $0.length > 0 } as [NSValue]
     }
     
@@ -361,21 +356,19 @@ extension InnerTextView {
                 return position
             }
             return self.move(position, direction, by: 1)
-        }.map { NSRange(location: $0, length: 0) }
+        }
+        .map {
+            NSRange(location: $0, length: 0)
+        }
     }
     
     // this is peak function signature fight me
     // move(index, .up, by: 1)
     func move(_ index: Int, _ direction: MoveDirection, by: Int) -> Int? {
-        guard
-            let textStorage = self.textStorage
-        else {
-            return nil
-        }
+        guard let textStorage = self.textStorage else { return nil }
         
         let lineRange = self.getLineRange(for: index)
         let characterPosition = index - lineRange.location
-        
         
         switch direction {
         case .up:
@@ -386,9 +379,7 @@ extension InnerTextView {
             }
             
             let previousLineRange = self.getLineRange(for: previousLine)
-            
             return previousLineRange.lowerBound + min(previousLineRange.length, characterPosition)
-            
         case .down:
             let nextLine = lineRange.upperBound + 1
             guard nextLine < textStorage.length else {
@@ -399,7 +390,6 @@ extension InnerTextView {
             let nextLineRange = self.getLineRange(for: nextLine)
             
             return nextLineRange.lowerBound + min(nextLineRange.length, characterPosition)
-            
         case .left:
             guard index - 1 >= 0 else {
                 // out of bounds, let's return 0 like Xcode does
@@ -424,7 +414,6 @@ extension InnerTextView {
     }
     
     func getLineInfo(for glyphIndex: Int) -> (NSRange, NSRect) {
-        
         guard let layoutManager = layoutManager else {
             fatalError("Missing Layout Manager. How did we get so far without it??")
         }
@@ -451,7 +440,6 @@ extension InnerTextView {
             return self.selectedRanges = [NSValue()]
         }
         self.selectedRanges = selection
-        
     }
     
 }

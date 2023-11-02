@@ -16,8 +16,7 @@ import Foundation
 
 public extension NSMutableAttributedString {
 	
-	convenience public init(source: String, tokens: [Token], theme: SyntaxColorTheme) {
-		
+    convenience init(source: String, tokens: [Token], theme: SyntaxColorTheme) {
 		self.init(string: source)
 		
 		var attributes = [NSAttributedString.Key: Any]()
@@ -47,7 +46,6 @@ public extension NSMutableAttributedString {
 		self.setAttributes(attributes, range: wholeRange)
 		
 		for token in tokens {
-			
 			if token.isPlain {
 				continue
 			}
@@ -75,9 +73,7 @@ public extension NSMutableAttributedString {
 //			}
 			
 			self.setAttributes(theme.attributes(for: token), range: tokenRange)
-			
 		}
-		
 	}
 	
 }

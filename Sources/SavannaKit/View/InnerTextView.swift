@@ -6,10 +6,10 @@
 //  Copyright © 2017 Silver Fox. All rights reserved.
 //
 
-import Foundation
-import CoreGraphics
 import AppKit
 import Carbon.HIToolbox
+import CoreGraphics
+import Foundation
 
 protocol InnerTextViewDelegate: class {
 	func didUpdateCursorFloatingState()
@@ -72,26 +72,18 @@ public final class InnerTextView: NSTextView {
         // TODO: Handle this
     }
     
-    
     public override func insertText(_ string: Any, replacementRange: NSRange) {
         switch string as? String {
-           case "[":
-               insertAfter(string, "]")
-           case "{":
-               insertAfter(string, "}")
-           case "(":
-               insertAfter(string, ")")
-           case "\"":
-               insertQuotes(string, "\"")
-           case "'":
-               insertQuotes(string, "'")
-           default:
-               super.insertText(string, replacementRange: replacementRange)
+           case "[": insertAfter(string, "]")
+           case "{": insertAfter(string, "}")
+           case "(": insertAfter(string, ")")
+           case "\"": insertQuotes(string, "\"")
+           case "'": insertQuotes(string, "'")
+           default: super.insertText(string, replacementRange: replacementRange)
            }
     }
     
     private func insertAfter(_ before: Any, _ after: String) {
-        
         // Skip the second char to avoid duplicates
         var skipAfter = false
         
@@ -103,19 +95,14 @@ public final class InnerTextView: NSTextView {
             }
         }
         
-        
         super.insertText(before, replacementRange: self.selectedRange)
         
-        guard !skipAfter else {
-            return
-        }
-        
+        guard !skipAfter else { return }
         super.insertText(after, replacementRange: self.selectedRange)
         self.moveBackward(self)
     }
     
     private func insertQuotes(_ before: Any, _ after: String) {
-        
         guard self.selectedRange.length > 0 else {
             insertAfter(before, after)
             return
@@ -126,26 +113,21 @@ public final class InnerTextView: NSTextView {
         targetRange.length = 0
         
         super.insertText(before, replacementRange: targetRange)
-        
         targetRange.location = originalRange.upperBound + 1
         
         super.insertText(after, replacementRange: targetRange)
-        
         originalRange.location += 1
         
         self.setSelectedRange(originalRange)
     }
 	
     public override func insertTab(_ sender: Any?) {
-        
         self.undoManager?.beginUndoGrouping()
         
-        var range = self.selectedRange
-        
+        let range = self.selectedRange
         let spaces = String(repeating: " ", count: theme?.tabWidth ?? 4)
         
         super.insertText(spaces, replacementRange: range)
-        
         self.undoManager?.endUndoGrouping()
         
         // TODO: Add selection tabbing support
@@ -171,4 +153,5 @@ public final class InnerTextView: NSTextView {
     public override var readablePasteboardTypes: [NSPasteboard.PasteboardType] {
         return [.string]
     }
+    
 }
